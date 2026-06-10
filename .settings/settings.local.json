@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(curl -s --max-filesize 500000 \"https://api.anthropic.com/v1/design/h/48IhFTz8GEpGI5Wn2_fVrA?open_file=Landing+Page.html\")",
+      "Read(//tmp/design_extracted/**)",
+      "Bash(mkdir -p \"/c/Users/owgue/OneDrive/Desktop/AA website/assets\")",
+      "Bash(cp -r \"/tmp/design_extracted/aa-lap/project/assets/.\" \"/c/Users/owgue/OneDrive/Desktop/AA website/assets/\")",
+      "Bash(start \"C:\\\\Users\\\\owgue\\\\OneDrive\\\\Desktop\\\\AA website\\\\index.html\")",
+      "mcp__agent_ai_Figma__get_design_context",
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\owgue\\\\OneDrive\\\\Desktop\\\\AA website\\\\assets\\\\\" | Where-Object { $_.Name -imatch \"cabana|ffc|farm\" } | Select-Object Name)",
+      "mcp__agent_ai_Figma__get_screenshot",
+      "mcp__agent_ai_Figma__get_metadata",
+      "mcp__agent_ai_Figma__use_figma"
+    ]
+  }
+}
