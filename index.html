@@ -631,6 +631,9 @@ nav {
   z-index: 9000;
   height: 100vh;
 }
+
+/* Mobile vertical-swipe products section — hidden on desktop, shown in mobile media query */
+.products-m { display: none; }
 .products-scroll-sticky {
   position: relative;
   height: 100vh;
@@ -732,7 +735,7 @@ nav {
 .slide-main-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
 }
@@ -1385,7 +1388,7 @@ nav {
 }
 .wwd-item {
   display: grid;
-  grid-template-columns: 44px 1fr 28px;
+  grid-template-columns: 44px 1fr;
   align-items: center;
   gap: 20px;
   padding: 26px 0;
@@ -1423,6 +1426,7 @@ nav {
   position: relative;
 }
 .wwd-item-chevron {
+  display: none;
   opacity: 0;
   transform: translateX(-8px);
   transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
@@ -1522,6 +1526,15 @@ nav {
 }
 .statement-text.green { color: var(--accent); }
 .statement-text.right { text-align: right; display: block; }
+.statement-text-lead {
+  font-size: clamp(28px, 3.4vw, 58px);
+  letter-spacing: -1px;
+}
+.statement-text-foundation {
+  font-size: clamp(68px, 9.5vw, 160px);
+  line-height: 0.88;
+  margin-top: 0.3em;
+}
 .statement-acclimation-text {
   position: absolute;
   top: 60px;
@@ -2185,8 +2198,11 @@ footer {
   transform: none;
 }
 
-/* ─── MOBILE ─── */
-@media (max-width: 768px) {
+/* Mobile hero product carousel — hidden on desktop, shown in mobile media query */
+.hero-m-carousel { display: none; }
+
+/* ─── MOBILE + TABLET (touch layout) ─── */
+@media (max-width: 1024px) {
 
   /* Nav */
   nav { padding: 0 24px; height: 64px; }
@@ -2194,30 +2210,176 @@ footer {
   .nav-logo { height: 36px; }
   .nav-aa { display: none; }
 
-  /* Hero — single static screen, scroll-jacking + GPU-heavy bits removed */
-  .hero-outer { height: 100vh; }
-  .hero { height: 100vh; }
+  /* Hero — single static screen, scroll-jacking + GPU-heavy bits removed.
+     Stack as a centered flex column so logo → subtext → carousel never overlap. */
+  .hero-outer { height: auto; min-height: 100vh; }
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 34px;
+    padding: 13vh 24px 132px;
+  }
   .hero-content {
-    left: 24px;
-    right: 24px;
-    top: 50%;
-    gap: 20px;
+    position: static;
+    left: auto;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
   }
   .hero-logo-main {
-    width: min(72vw, 280px);
+    width: min(66vw, 260px);
     margin-left: 0;
     margin-top: 0;
   }
   .hero-tagline {
-    max-width: 100%;
+    max-width: 440px;
     margin-left: 0;
   }
-  .hero-tagline p { font-size: 14px; line-height: 1.55; }
+  .hero-tagline p { font-size: 12.5px; line-height: 1.5; }
 
   /* Oversized frosted blob + scroll carousel: off-screen and GPU-heavy on phones */
   .hero-blob-wrap,
   .hero-blob-notch { display: none; }
   .hero-vert-meta { display: none; }
+
+  /* Mobile product carousel — swipe left/right through clay models */
+  .hero-m-carousel {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-top: auto;
+    z-index: 9000;
+    pointer-events: auto;
+  }
+  .hero-m-track {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 calc(50vw - 115px);
+  }
+  .hero-m-track::-webkit-scrollbar { display: none; }
+  .hero-m-item {
+    flex: 0 0 230px;
+    height: 200px;
+    scroll-snap-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.35;
+    transform: scale(0.72);
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
+    will-change: transform, opacity;
+  }
+  .hero-m-item.is-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .hero-m-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* Same treatment as the desktop carousel — strips the baked-in black background */
+    filter: url('#removeDarkBg') brightness(1.45) saturate(1.3) contrast(1.05);
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+  /* Swipe-indicator arrows flanking the clay image */
+  .hero-m-arrow {
+    position: absolute;
+    top: 100px;                /* vertical centre of the 200px clay row */
+    transform: translateY(-50%);
+    z-index: 9100;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(10,13,13,0.35);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .hero-m-arrow svg {
+    width: 18px;
+    height: 18px;
+    stroke: rgba(255,255,255,0.85);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hero-m-arrow-left  { left: 14px;  animation: heroMNudgeL 1.9s ease-in-out infinite; }
+  .hero-m-arrow-right { right: 14px; animation: heroMNudgeR 1.9s ease-in-out infinite; }
+  .hero-m-arrow:active { background: rgba(4,202,130,0.25); border-color: var(--accent); }
+  @keyframes heroMNudgeL {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50%      { transform: translateY(-50%) translateX(-4px); }
+  }
+  @keyframes heroMNudgeR {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50%      { transform: translateY(-50%) translateX(4px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-m-arrow-left, .hero-m-arrow-right { animation: none; }
+  }
+
+  .hero-m-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    text-align: center;
+  }
+  .hero-m-category {
+    font-size: 10px;
+    letter-spacing: 3px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+  }
+  .hero-m-name {
+    font-size: 22px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .hero-m-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 16px;
+  }
+  .hero-m-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.28);
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+  .hero-m-dot.is-active {
+    width: 20px;
+    border-radius: 3px;
+    background: #fff;
+  }
 
   /* Water displacement filter needs a mouse and is costly — drop it on the video */
   .hero-bg { filter: none !important; }
@@ -2225,7 +2387,9 @@ footer {
 
   /* Carousel no longer reveals the button, so surface it directly */
   .hero-explore-btn {
-    right: 24px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: 48px;
     font-size: 9px;
     padding: 12px 18px;
@@ -2236,31 +2400,183 @@ footer {
   .hero-bottom-line { left: 24px; right: 24px; }
 
   /* Products overlay */
-  .slider-slide {
-    grid-template-columns: 1fr;
-    grid-template-rows: 55% 1fr;
+  /* Desktop scroll-jacked products overlay — replaced by vertical-swipe section on mobile */
+  .products-scroll-outer { display: none !important; }
+
+  /* ─── Mobile products — full-screen overlay, opened via "Explore Projects" ─── */
+  .products-m {
+    display: none;            /* hidden until opened */
+    position: fixed;
+    inset: 0;
+    z-index: 9600;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background: rgb(10,13,13);
+    opacity: 0;
+    transition: opacity 0.35s ease;
   }
-  .slider-slide:has(.slide-main:hover) { grid-template-columns: 1fr; }
-  .slide-main { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .slide-panel { grid-template-rows: 0 auto; }
-  .slide-panel-model { display: none; }
-  .slide-panel-text { padding: 20px 24px; gap: 7px; }
-  .slide-name { font-size: clamp(26px, 7vw, 42px); }
-  .slide-desc { font-size: 12px; }
-  .slide-specs { gap: 16px; }
-  .slide-spec-value { font-size: 22px; }
-  .slider-back-btn {
-    bottom: 24px;
-    left: 20px;
+  .products-m::-webkit-scrollbar { display: none; }
+  .products-m.is-open { display: block; opacity: 1; }
+
+  /* Close / back button */
+  .pm-close {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 9700;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(10,13,13,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .pm-close svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; fill: none; }
+
+  .products-m-card {
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background:
+      linear-gradient(rgba(10,13,13,0.80), rgba(10,13,13,0.92)),
+      url('assets/BackGrounds/products-bg.png') center / cover no-repeat;
+  }
+  .pm-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 80px 24px 52px;
+  }
+  .pm-head { display: flex; flex-direction: column; gap: 8px; }
+  .pm-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .pm-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 8.5vw, 46px);
+    font-weight: 200;
+    line-height: 1.02;
+    letter-spacing: -1.5px;
+    color: var(--white);
+  }
+
+  /* Stacked layout: info (head) → image → stats → text */
+  .pm-mid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  .pm-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 34vh;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 5px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+  }
+  .pm-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+  .pm-stats {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .pm-stat { flex: 1; }
+  .pm-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 11px;
+    border-left: 2px solid var(--accent);
+  }
+  .pm-stat-num { display: flex; align-items: baseline; gap: 3px; }
+  .pm-stat-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 27px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--white);
+  }
+  .pm-stat-unit {
+    font-family: 'Oswald', sans-serif;
     font-size: 13px;
-    padding: 14px 24px 14px 18px;
+    font-weight: 300;
+    color: var(--accent);
   }
-  .slider-progress {
-    left: auto;
-    right: 20px;
-    bottom: 32px;
+  .pm-stat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8.5px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
   }
-  .slider-header-text { padding: 64px 24px 0; }
+
+  .pm-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.55);
+  }
+  .pm-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pm-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8.5px;
+    font-weight: 400;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    padding: 5px 11px;
+  }
+
+  /* Vertical progress rail — fixed while the section is in view */
+  .pm-progress {
+    display: none;
+    position: fixed;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    z-index: 9500;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .pm-progress.is-visible { display: flex; }
+  .pm-progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transition: height 0.3s ease, background 0.3s ease;
+  }
+  .pm-progress-dot.is-active {
+    height: 20px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
 
   /* Statement tagline */
   .statement-tagline-inner { padding: 0 24px; }
@@ -2280,12 +2596,18 @@ footer {
     right: 5%;
   }
   .statement-text { font-size: clamp(28px, 8vw, 52px); letter-spacing: -1.5px; }
+  .statement-text-lead { font-size: clamp(18px, 5vw, 32px); letter-spacing: -0.5px; }
+  .statement-text-foundation { font-size: clamp(46px, 13vw, 88px); line-height: 0.9; }
 
   /* What We Do — already has 900px breakpoint, tighten for mobile */
   .wwd-left { padding: 48px 24px; min-height: auto; }
   .wwd-right { padding: 48px 24px; }
   .wwd-right-header { margin-bottom: 32px; }
-  .wwd-item { grid-template-columns: 36px 1fr 20px; gap: 12px; padding: 18px 0; }
+  .wwd-item { grid-template-columns: 36px 1fr; gap: 12px; padding: 18px 0; }
+  /* Longer category names/descriptions (from aa-ds.com) — scale to fit touch widths */
+  .wwd-active-name { font-size: clamp(26px, 7vw, 42px); letter-spacing: -1px; margin-bottom: 16px; }
+  .wwd-active-desc { font-size: 13.5px; line-height: 1.65; max-width: 100%; margin-bottom: 32px; }
+  .wwd-item-name { font-size: clamp(17px, 4.6vw, 22px); line-height: 1.25; }
 
   /* Services */
   .services-scroll-wrapper { height: 500vh; }
@@ -2319,6 +2641,38 @@ footer {
   .txoc { display: none; }
   #oshunTransition > img { width: 100%; }
 }
+
+/* ─── TABLET refinements — scale the touch layout up (600–1024px) ─── */
+@media (min-width: 600px) and (max-width: 1024px) {
+
+  /* Hero: larger logo, roomier spacing, content kept centred & capped */
+  .hero { padding: 14vh 40px 150px; gap: 44px; }
+  .hero-logo-main { width: min(46vw, 360px); }
+  .hero-tagline { max-width: 560px; }
+  .hero-tagline p { font-size: 15px; line-height: 1.6; }
+
+  /* Hero clay carousel: bigger models, show more neighbours */
+  .hero-m-track { padding: 0 calc(50vw - 175px); }
+  .hero-m-item { flex: 0 0 350px; height: 300px; }
+  .hero-m-name { font-size: 28px; }
+  .hero-m-category { font-size: 12px; }
+
+  /* Products overlay: cap content width, centre it, larger type */
+  .pm-inner { max-width: 720px; margin: 0 auto; gap: 28px; padding: 120px 48px 96px; }
+  .pm-name { font-size: clamp(46px, 6.5vw, 68px); }
+  .pm-label { font-size: 12px; }
+  .pm-mid { gap: 28px; }
+  .pm-stat-value { font-size: 38px; }
+  .pm-stat-unit { font-size: 16px; }
+  .pm-stat-label { font-size: 10px; }
+  .pm-desc { font-size: 15px; line-height: 1.75; max-width: 600px; }
+  .pm-tag { font-size: 10px; padding: 6px 13px; }
+  .pm-close { top: 24px; right: 24px; width: 48px; height: 48px; }
+  .pm-close svg { width: 20px; height: 20px; }
+  .pm-progress { right: 20px; gap: 10px; }
+  .pm-progress-dot { width: 7px; height: 7px; }
+  .pm-progress-dot.is-active { height: 24px; }
+}
 </style>
 </head>
 <body>
@@ -2338,7 +2692,7 @@ footer {
       <div class="intro-ribbon" id="introRibbon">
         <!-- set 1 -->
         <img class="intro-ribbon-logo" src="assets/Logos/Aldar.png" alt="Aldar">
-        <img class="intro-ribbon-logo" src="assets/Logos/Damac_logo.svg.png" alt="DAMAC" style="height:40px;">
+        <img class="intro-ribbon-logo" src="assets/Logos/bloomberg.png" alt="Bloomberg" style="height:90px;">
         <img class="intro-ribbon-logo" src="assets/Logos/Eagle_Hills.png" alt="Eagle Hills">
         <img class="intro-ribbon-logo" src="assets/Logos/Emaar-Properties-Logo-old.png" alt="Emaar" style="filter:grayscale(1) brightness(0.7) contrast(180%) invert(1); mix-blend-mode:screen;">
         <img class="intro-ribbon-logo" src="assets/Logos/BIG_oceaya_logo.svg" alt="OCEAYA">
@@ -2346,7 +2700,7 @@ footer {
         <img class="intro-ribbon-logo" src="assets/Logos/CNN-Logo-1980.png" alt="CNN">
         <!-- set 2 (duplicate for seamless loop) -->
         <img class="intro-ribbon-logo" src="assets/Logos/Aldar.png" alt="Aldar">
-        <img class="intro-ribbon-logo" src="assets/Logos/Damac_logo.svg.png" alt="DAMAC" style="height:40px;">
+        <img class="intro-ribbon-logo" src="assets/Logos/bloomberg.png" alt="Bloomberg" style="height:90px;">
         <img class="intro-ribbon-logo" src="assets/Logos/Eagle_Hills.png" alt="Eagle Hills">
         <img class="intro-ribbon-logo" src="assets/Logos/Emaar-Properties-Logo-old.png" alt="Emaar" style="filter:grayscale(1) brightness(0.7) contrast(180%) invert(1); mix-blend-mode:screen;">
         <img class="intro-ribbon-logo" src="assets/Logos/BIG_oceaya_logo.svg" alt="OCEAYA">
@@ -2467,6 +2821,30 @@ footer {
     </video>
   </div>
   <div class="hero-overlay"></div>
+
+  <!-- Mobile-only: horizontal swipe carousel of clay product models -->
+  <div class="hero-m-carousel" id="heroMCarousel" aria-label="Products">
+    <div class="hero-m-track" id="heroMTrack">
+      <div class="hero-m-item" data-i="0" data-cat="URBAN MOBILITY" data-name="ORCA"><img decoding="async" src="assets/Product-Clay/orca-clay.png" alt="ORCA"></div>
+      <div class="hero-m-item" data-i="1" data-cat="AMBULATORY"  data-name="AQUA PODS"><img loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay.png" alt="AQUA PODS"></div>
+      <div class="hero-m-item" data-i="2" data-cat="LIVING"       data-name="CABANAS"><img loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay.png" alt="CABANAS"></div>
+      <div class="hero-m-item" data-i="3" data-cat="MOBILITY"     data-name="MANTARAY"><img loading="lazy" decoding="async" src="assets/Product-Clay/Mantaray Clay.png" alt="MANTARAY"></div>
+      <div class="hero-m-item" data-i="4" data-cat="AGRICULTURE"  data-name="FARM CELLS"><img loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay.png" alt="FARM CELLS"></div>
+      <div class="hero-m-item" data-i="5" data-cat="RESIDENCE"    data-name="OSHUN"><img loading="lazy" decoding="async" src="assets/Product-Clay/Oshun Clay 2.png" alt="OSHUN"></div>
+    </div>
+    <button class="hero-m-arrow hero-m-arrow-left" id="heroMArrowL" aria-label="Previous product">
+      <svg viewBox="0 0 24 24"><polyline points="15 5 8 12 15 19"/></svg>
+    </button>
+    <button class="hero-m-arrow hero-m-arrow-right" id="heroMArrowR" aria-label="Next product">
+      <svg viewBox="0 0 24 24"><polyline points="9 5 16 12 9 19"/></svg>
+    </button>
+    <div class="hero-m-meta">
+      <span class="hero-m-category" id="heroMCategory">URBAN MOBILITY</span>
+      <span class="hero-m-name" id="heroMName">ORCA</span>
+    </div>
+    <div class="hero-m-dots" id="heroMDots"></div>
+  </div>
+
   <!-- Frosted glass blob with vertical carousel -->
   <div class="hero-blob-wrap" id="heroBlobWrap">
     <div class="hero-vert-viewport">
@@ -2480,8 +2858,8 @@ footer {
       </div>
     </div>
     <div class="hero-vert-meta" id="heroVertMeta">
-      <div class="hero-vert-combined hero-vert-title-row"><span class="hero-vert-category" id="heroVertCategory">TRANSPORT</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name" id="heroVertName">ORCA</span></div>
-      <div class="hero-vert-sub hero-vert-title-row" id="heroVertSub">DESIGN CONSULTATION</div>
+      <div class="hero-vert-combined hero-vert-title-row"><span class="hero-vert-category" id="heroVertCategory">URBAN MOBILITY</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name" id="heroVertName">ORCA</span></div>
+      <div class="hero-vert-sub hero-vert-title-row" id="heroVertSub">Our Developments</div>
       <button class="hero-vert-consult" id="heroVertConsult">Consult</button>
     </div>
   </div>
@@ -2523,61 +2901,8 @@ footer {
     <div class="products-slides-phase visible" id="productsSlidesPhase">
       <div class="slides-track" id="slidesTrack">
 
-      <!-- SLIDE 01: OSHUN -->
+      <!-- SLIDE 01: ORCA -->
       <div class="slider-slide" data-index="0">
-        <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/Oshun 1 .png" alt="Oshun">
-          <div class="slide-callouts">
-            <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Modular Floating Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-            <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Garden Terraces & Planting</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-            <div class="slide-callout" style="top:72%"><span class="slide-callout-label">Water Feature Seating</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-          </div>
-        </div>
-        <div class="slide-panel">
-          <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/Oshun Clay 2.png" alt="Oshun clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/ohsun-iso.png" alt="Oshun isometric">
-            <div class="slide-model-toggle">
-              <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
-              <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
-            </div>
-            <span class="slide-model-hint">Click to toggle view</span>
-          </div>
-          <div class="slide-panel-text">
-            <div class="slide-label">THEMED FLOATING BEACH CLUB</div>
-            <h2 class="slide-name">OSHUN</h2>
-            <div class="slide-mooring">Selfpropelled</div>
-            <p class="slide-desc">Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance.</p>
-            <p class="slide-desc">Blends experience design with environmental sensitivity and regulatory compliance.</p>
-            <div class="slide-specs">
-              <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="2">0</span><span class="slide-spec-unit"></span></div>
-                <span class="slide-spec-label">Design Stage</span>
-              </div>
-              <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="3">0</span><span class="slide-spec-unit"></span></div>
-                <span class="slide-spec-label">Deck Levels</span>
-              </div>
-              <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="200">0</span><span class="slide-spec-unit">+</span></div>
-                <span class="slide-spec-label">Guests</span>
-              </div>
-            </div>
-            <div class="slide-tags">
-              <span class="slide-tag">Floating Beach Club</span>
-              <span class="slide-tag">Marine Hospitality</span>
-              <span class="slide-tag">Sacred Design</span>
-            </div>
-            <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
-              <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept Design</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 02: ORCA -->
-      <div class="slider-slide" data-index="1">
         <div class="slide-main">
           <img class="slide-main-img" src="assets/Product-Images/Orca 3.png" alt="ORCA">
           <div class="slide-callouts">
@@ -2597,7 +2922,7 @@ footer {
             <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">WATER TRANSPORTATION</div>
+            <div class="slide-label">URBAN MOBILITY</div>
             <h2 class="slide-name">ORCA</h2>
             <div class="slide-mooring">Selfpropelled</div>
             <p class="slide-desc">Design water-based transportation infrastructure, including floating hubs, taxi terminals, and adaptive mobility platforms.</p>
@@ -2629,6 +2954,59 @@ footer {
         </div>
       </div>
 
+      <!-- SLIDE 02: OSHUN -->
+      <div class="slider-slide" data-index="1">
+        <div class="slide-main">
+          <img class="slide-main-img" src="assets/Product-Images/Oshun 1 .png" alt="Oshun">
+          <div class="slide-callouts">
+            <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Modular Floating Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Garden Terraces & Planting</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:72%"><span class="slide-callout-label">Water Feature Seating</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+          </div>
+        </div>
+        <div class="slide-panel">
+          <div class="slide-panel-model" data-model="clay">
+            <img class="slide-model-img model-clay" src="assets/Product-Clay/Oshun Clay 2.png" alt="Oshun clay model">
+            <img class="slide-model-img model-iso"  src="assets/Product-iso/ohsun-iso.png" alt="Oshun isometric">
+            <div class="slide-model-toggle">
+              <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
+              <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
+            </div>
+            <span class="slide-model-hint">Click to toggle view</span>
+          </div>
+          <div class="slide-panel-text">
+            <div class="slide-label">FLOATING SUITES &amp; RESIDENCES</div>
+            <h2 class="slide-name">OSHUN</h2>
+            <div class="slide-mooring">Selfpropelled</div>
+            <p class="slide-desc">Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance.</p>
+            <p class="slide-desc">Blends experience design with environmental sensitivity and regulatory compliance.</p>
+            <div class="slide-specs">
+              <div class="slide-spec">
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="2">0</span><span class="slide-spec-unit"></span></div>
+                <span class="slide-spec-label">Design Stage</span>
+              </div>
+              <div class="slide-spec">
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="3">0</span><span class="slide-spec-unit"></span></div>
+                <span class="slide-spec-label">Deck Levels</span>
+              </div>
+              <div class="slide-spec">
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="200">0</span><span class="slide-spec-unit">+</span></div>
+                <span class="slide-spec-label">Guests</span>
+              </div>
+            </div>
+            <div class="slide-tags">
+              <span class="slide-tag">Floating Beach Club</span>
+              <span class="slide-tag">Marine Hospitality</span>
+              <span class="slide-tag">Sacred Design</span>
+            </div>
+            <div class="slide-footer">
+              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept Design</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SLIDE 03: AQUA PODS -->
       <div class="slider-slide" data-index="2">
         <div class="slide-main">
@@ -2650,7 +3028,7 @@ footer {
             <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">FLOATING HOSPITALITY</div>
+            <div class="slide-label">AMBULATORY</div>
             <h2 class="slide-name">AQUA<br>PODS</h2>
             <p class="slide-desc">Floating, self-contained marine hospitality and commercial units designed to operate as mobile venues on water. Aqua Pods introduce a new typology of floating architecture combining entertainment, dining, and experiential spaces within a compact, technologically integrated pod.</p>
             <div class="slide-specs">
@@ -2754,7 +3132,7 @@ footer {
             <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">FLOATING FARM CELLS (FFC)</div>
+            <div class="slide-label">AGRICULTURE</div>
             <h2 class="slide-name">FLOATING<br>FARM CELLS</h2>
             <div class="slide-mooring">Permanent Mooring</div>
             <p class="slide-desc">Design floating agricultural systems that support food security, sustainability, and blue economy initiatives.</p>
@@ -2789,7 +3167,7 @@ footer {
       <!-- SLIDE 06: MANTARAY -->
       <div class="slider-slide" data-index="5">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/mantaray.png" alt="Mantaray">
+          <img class="slide-main-img" src="assets/Product-Images/Mantaray 1.png" alt="Mantaray">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar-Harvesting Roof Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Recyclable HDPE Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -2871,14 +3249,141 @@ footer {
   </div><!-- /products-scroll-sticky -->
 </div><!-- /products-scroll-outer -->
 
+<!-- MOBILE PRODUCTS — vertical swipe overlay (mobile only) -->
+<section class="products-m" id="productsM" aria-label="Products">
+
+  <!-- Close / back to page -->
+  <button class="pm-close" id="pmClose" aria-label="Close products">
+    <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+
+  <div class="products-m-card" data-index="0">
+    <div class="pm-inner">
+      <header class="pm-head">
+        <div class="pm-label">URBAN MOBILITY</div>
+        <h2 class="pm-name">ORCA</h2>
+      </header>
+      <div class="pm-mid">
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/Orca 3.png" alt="Orca"></div>
+        <div class="pm-stats">
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">18</span><span class="pm-stat-unit">m</span></div><span class="pm-stat-label">Length</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">24</span></div><span class="pm-stat-label">Passengers</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">22</span><span class="pm-stat-unit">kn</span></div><span class="pm-stat-label">Max Speed</span></div>
+        </div>
+      </div>
+      <p class="pm-desc">Design water-based transportation infrastructure, including floating hubs, taxi terminals, and adaptive mobility platforms.</p>
+      <div class="pm-tags"><span class="pm-tag">Electric Drive</span><span class="pm-tag">Catamaran Hull</span><span class="pm-tag">Solar-Powered</span></div>
+    </div>
+  </div>
+
+  <div class="products-m-card" data-index="1">
+    <div class="pm-inner">
+      <header class="pm-head">
+        <div class="pm-label">AMBULATORY</div>
+        <h2 class="pm-name">AQUA PODS</h2>
+      </header>
+      <div class="pm-mid">
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/AquaPod - Adnoc.png" alt="Aqua Pods"></div>
+        <div class="pm-stats">
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">15</span><span class="pm-stat-unit">m</span></div><span class="pm-stat-label">Diameter</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">40</span></div><span class="pm-stat-label">Guests</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">360</span><span class="pm-stat-unit">°</span></div><span class="pm-stat-label">Views</span></div>
+        </div>
+      </div>
+      <p class="pm-desc">Floating, self-contained marine hospitality and commercial units designed to operate as mobile venues on water — a new typology combining entertainment, dining, and experiential spaces in a compact pod.</p>
+      <div class="pm-tags"><span class="pm-tag">Modular</span><span class="pm-tag">Relocatable</span><span class="pm-tag">Off-Grid</span></div>
+    </div>
+  </div>
+
+  <div class="products-m-card" data-index="2">
+    <div class="pm-inner">
+      <header class="pm-head">
+        <div class="pm-label">HOTEL FLOATING CABANAS</div>
+        <h2 class="pm-name">FLOATING CABANAS</h2>
+      </header>
+      <div class="pm-mid">
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/cabana.png" alt="Floating Cabanas"></div>
+        <div class="pm-stats">
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">85</span><span class="pm-stat-unit">m²</span></div><span class="pm-stat-label">Floor Area</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">6</span></div><span class="pm-stat-label">Guests</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">50</span><span class="pm-stat-unit">yr</span></div><span class="pm-stat-label">Lifespan</span></div>
+        </div>
+      </div>
+      <p class="pm-desc">Design floating leisure infrastructure, including private cabanas, shaded lounge platforms, and adaptable waterfront hospitality units.</p>
+      <div class="pm-tags"><span class="pm-tag">EPS Buoyancy</span><span class="pm-tag">Eagle Hills</span><span class="pm-tag">Ramhan Island</span></div>
+    </div>
+  </div>
+
+  <div class="products-m-card" data-index="3">
+    <div class="pm-inner">
+      <header class="pm-head">
+        <div class="pm-label">MARINE MOBILITY</div>
+        <h2 class="pm-name">MANTARAY</h2>
+      </header>
+      <div class="pm-mid">
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/Mantaray 1.png" alt="Mantaray"></div>
+        <div class="pm-stats">
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">22</span><span class="pm-stat-unit">m</span></div><span class="pm-stat-label">Length</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">12</span></div><span class="pm-stat-label">Passengers</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">28</span><span class="pm-stat-unit">kn</span></div><span class="pm-stat-label">Max Speed</span></div>
+        </div>
+      </div>
+      <p class="pm-desc">A solar-powered electric passenger vessel for Abu Dhabi's coastal waters — zero fuel, silent electric propulsion, and a recyclable HDPE body with panoramic views.</p>
+      <div class="pm-tags"><span class="pm-tag">Solar-Powered</span><span class="pm-tag">Electric Drive</span><span class="pm-tag">Water Taxi</span></div>
+    </div>
+  </div>
+
+  <div class="products-m-card" data-index="4">
+    <div class="pm-inner">
+      <header class="pm-head">
+        <div class="pm-label">AGRICULTURE</div>
+        <h2 class="pm-name">FLOATING FARM CELLS</h2>
+      </header>
+      <div class="pm-mid">
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/ffc.png" alt="Floating Farm Cells"></div>
+        <div class="pm-stats">
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">200</span><span class="pm-stat-unit">m²</span></div><span class="pm-stat-label">Cell Area</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">500</span><span class="pm-stat-unit">kg</span></div><span class="pm-stat-label">Monthly Yield</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">12</span></div><span class="pm-stat-label">Modules</span></div>
+        </div>
+      </div>
+      <p class="pm-desc">Design floating agricultural systems that support food security, sustainability, and blue economy initiatives — built for modularity and offshore integration.</p>
+      <div class="pm-tags"><span class="pm-tag">Hydroponic</span><span class="pm-tag">Circular Economy</span><span class="pm-tag">Scalable Grid</span></div>
+    </div>
+  </div>
+
+  <div class="products-m-card" data-index="5">
+    <div class="pm-inner">
+      <header class="pm-head">
+        <div class="pm-label">FLOATING SUITES &amp; RESIDENCES</div>
+        <h2 class="pm-name">OSHUN</h2>
+      </header>
+      <div class="pm-mid">
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/Oshun 1 .png" alt="Oshun"></div>
+        <div class="pm-stats">
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">2</span></div><span class="pm-stat-label">Design Stage</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">3</span></div><span class="pm-stat-label">Deck Levels</span></div>
+          <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">200</span><span class="pm-stat-unit">+</span></div><span class="pm-stat-label">Guests</span></div>
+        </div>
+      </div>
+      <p class="pm-desc">Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance.</p>
+      <div class="pm-tags"><span class="pm-tag">Floating Beach Club</span><span class="pm-tag">Marine Hospitality</span><span class="pm-tag">Sacred Design</span></div>
+    </div>
+  </div>
+
+  <!-- vertical progress rail -->
+  <div class="pm-progress" id="pmProgress" aria-hidden="true"></div>
+</section>
+<!-- /MOBILE PRODUCTS -->
+
 
 
 <!-- STATEMENT TAGLINE -->
 <section class="statement-tagline" id="statementTagline">
   <img class="statement-tagline-bg" src="assets/BackGrounds/sharp BG.png" alt="">
   <div class="statement-tagline-inner">
-    <div class="statement-text">WHERE WATER<br>IS THE</div>
-    <div class="statement-text"><span style="font-weight:500">F</span>OUNDATION</div>
+    <div class="statement-text statement-text-lead">WHERE WATER IS THE</div>
+    <div class="statement-text statement-text-foundation"><span style="font-weight:500">F</span>OUNDATION</div>
   </div>
 </section>
 
@@ -2899,9 +3404,9 @@ footer {
       </div>
 
       <div class="wwd-active-name">
-        <span class="wwd-active-name-inner" id="wwdName">Shorelines</span>
+        <span class="wwd-active-name-inner" id="wwdName">Floating Suites &amp; Residences</span>
       </div>
-      <p class="wwd-active-desc" id="wwdDesc">Adaptive coastal and shoreline environments designed for resilience, ecological integration, and long-term habitation where land meets water.</p>
+      <p class="wwd-active-desc" id="wwdDesc">Design and deliver floating hospitality assets and residences as permanent, high-performance real estate — not vessels. Optimized for comfort, environmental response, operational efficiency, and multi-jurisdiction deployment.</p>
 
       <div class="wwd-progress" id="wwdProgress">
         <div class="wwd-progress-dot active" data-idx="0"></div>
@@ -2926,27 +3431,27 @@ footer {
       </div>
       <div class="wwd-item active" data-idx="0">
         <span class="wwd-item-num">01</span>
-        <span class="wwd-item-name">Shorelines</span>
+        <span class="wwd-item-name">Floating Suites &amp; Residences</span>
         <span class="wwd-item-chevron"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
       <div class="wwd-item" data-idx="1">
         <span class="wwd-item-num">02</span>
-        <span class="wwd-item-name">Island Lodges</span>
+        <span class="wwd-item-name">Agriculture / Food Security</span>
         <span class="wwd-item-chevron"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
       <div class="wwd-item" data-idx="2">
         <span class="wwd-item-num">03</span>
-        <span class="wwd-item-name">Floating Residence</span>
+        <span class="wwd-item-name">Urban Mobility</span>
         <span class="wwd-item-chevron"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
       <div class="wwd-item" data-idx="3">
         <span class="wwd-item-num">04</span>
-        <span class="wwd-item-name">Water Transport &amp; Tourism</span>
+        <span class="wwd-item-name">Recreational &amp; Retail</span>
         <span class="wwd-item-chevron"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
       <div class="wwd-item" data-idx="4">
         <span class="wwd-item-num">05</span>
-        <span class="wwd-item-name">Utilities</span>
+        <span class="wwd-item-name">Entertainment</span>
         <span class="wwd-item-chevron"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
       </div>
     </div>
@@ -3062,23 +3567,24 @@ footer {
 <footer>
   <div>
     <img src="assets/Logos/logo.png" alt="AA" class="footer-logo">
-    <p class="footer-tagline">The Middle East's leading authority in marine architecture and adaptive infrastructure.</p>
+    <p class="footer-tagline">Since 2017, redefining life on water from the UAE to the world.</p>
   </div>
   <div>
     <div class="footer-col-title">Navigation</div>
     <div class="footer-links">
-      <a class="footer-link">Projects</a>
-      <a class="footer-link">Our Realm</a>
-      <a class="footer-link">Media & Awards</a>
-      <a class="footer-link">About Us</a>
+      <a class="footer-link" href="https://www.aa-ds.com/" target="_blank" rel="noopener">Home</a>
+      <a class="footer-link" href="https://www.aa-ds.com/about" target="_blank" rel="noopener">About</a>
+      <a class="footer-link" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener">Projects</a>
+      <a class="footer-link" href="https://www.aa-ds.com/media-and-awards" target="_blank" rel="noopener">Media &amp; Awards</a>
+      <a class="footer-link" href="https://www.aa-ds.com/contact" target="_blank" rel="noopener">Contact</a>
     </div>
   </div>
   <div>
     <div class="footer-col-title">Contact</div>
     <div class="footer-links">
-      <a class="footer-link">hello@aquaticarchitects.com</a>
-      <a class="footer-link">+1 (555) 123-4567</a>
-      <a class="footer-link">123 Ocean Drive, Coastal City</a>
+      <a class="footer-link" href="mailto:info@aa-ds.com">info@aa-ds.com</a>
+      <a class="footer-link" href="tel:+97143881128">+971 4 388 1128</a>
+      <a class="footer-link">Dubai, The 7 By Aurora, Office 5, UAE</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -3089,21 +3595,21 @@ footer {
     </div>
     <div class="footer-socials">
       <!-- YouTube -->
-      <a class="social-icon" href="#" aria-label="YouTube">
+      <a class="social-icon" href="https://www.youtube.com/@AquaticArchitects" target="_blank" rel="noopener" aria-label="YouTube">
         <img src="assets/Logos/icon-youtube.svg" alt="YouTube" style="width:20px;height:16px;filter:invert(1);">
       </a>
+      <!-- LinkedIn -->
+      <a class="social-icon" href="https://www.linkedin.com/company/13584110/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V23h-4V8zm7.5 0h3.83v2.05h.05c.53-1 1.84-2.05 3.79-2.05 4.05 0 4.8 2.67 4.8 6.14V23h-4v-6.62c0-1.58-.03-3.61-2.2-3.61-2.2 0-2.54 1.72-2.54 3.5V23h-4V8z"/>
+        </svg>
+      </a>
       <!-- Instagram -->
-      <a class="social-icon" href="#" aria-label="Instagram">
+      <a class="social-icon" href="https://www.instagram.com/AquaticArchitectsOfficial/" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
           <circle cx="12" cy="12" r="4.5"></circle>
           <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-        </svg>
-      </a>
-      <!-- X / Twitter -->
-      <a class="social-icon" href="#" aria-label="X">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </svg>
       </a>
     </div>
@@ -3209,26 +3715,26 @@ fadeEls.forEach(el => fadeObserver.observe(el));
     requestAnimationFrame(() => {
       const productsOuter = document.getElementById('productsOuter');
       if (productsOuter) productsOuter.style.display = 'none';
-      window.scrollTo({ top: (heroOuter.offsetHeight - window.innerHeight) * 0.97, behavior: 'instant' });
+      window.scrollTo({ top: (heroOuter.offsetHeight - window.innerHeight) * 0.03, behavior: 'instant' });
 
-      // Restore carousel to Oshun (last item) centered
+      // Restore carousel to Orca (first item) centered — slide 0 is now Orca
       if (heroTrack) {
         const heroItems = Array.from(heroTrack.querySelectorAll('.hero-vert-item'));
         heroItems.forEach((item, i) => {
-          const dist  = Math.abs(i - (VERT_N - 1));
+          const dist  = Math.abs(i - 0);
           item.style.transform = `scale(${Math.max(0.45, 1.3 - dist * 0.55).toFixed(3)})`;
           item.style.opacity   = Math.max(0.12, 1 - dist * 0.4).toFixed(3);
         });
-        heroTrack.style.transform = `translateY(-${((VERT_N - 1) * VERT_STEP + 190)}px)`;
+        heroTrack.style.transform = `translateY(-${(0 * VERT_STEP + 190)}px)`;
       }
 
-      // Measure Oshun item (now in its correct scroll position) and contract to it
+      // Measure Orca item (now in its correct scroll position) and contract to it
       requestAnimationFrame(() => {
         const heroItems   = heroTrack ? Array.from(heroTrack.querySelectorAll('.hero-vert-item')) : [];
-        const oshunCircle = heroItems.length ? heroItems[heroItems.length - 1] : null;
-        if (!oshunCircle) { fadeOverlayOut(); window._oshunTxFired = false; reverseFired = false; return; }
+        const bridgeCircle = heroItems.length ? heroItems[0] : null;
+        if (!bridgeCircle) { fadeOverlayOut(); window._oshunTxFired = false; reverseFired = false; return; }
 
-        const cr  = oshunCircle.getBoundingClientRect();
+        const cr  = bridgeCircle.getBoundingClientRect();
         const img = overlay.querySelector('img');
         if (img) img.style.objectFit = 'cover';
 
@@ -3255,12 +3761,12 @@ fadeEls.forEach(el => fadeObserver.observe(el));
     wasDeep              = false;
     window._oshunTxFired = true; // block forward from re-firing during reverse animation
 
-    // Expand from Oshun clay panel position to full screen
-    const oshunSlide = document.querySelector('.slider-slide[data-index="0"]');
-    const imageWrap  = oshunSlide && oshunSlide.querySelector('.slide-panel-model');
+    // Expand from the slide-0 (Orca) clay panel position to full screen
+    const bridgeSlide = document.querySelector('.slider-slide[data-index="0"]');
+    const imageWrap  = bridgeSlide && bridgeSlide.querySelector('.slide-panel-model');
     const ir         = imageWrap ? imageWrap.getBoundingClientRect() : null;
     const img        = overlay.querySelector('img');
-    if (img) { img.src = 'assets/Product-Clay/Oshun Clay 2.png'; img.style.objectFit = 'contain'; }
+    if (img) { img.src = 'assets/Product-Clay/orca-clay.png'; img.style.objectFit = 'contain'; }
 
     if (ir) {
       overlay.style.cssText = `
@@ -3683,8 +4189,8 @@ tickRipple();
   if (!outer || !track) return;
 
   const NAMES      = ['ORCA', 'AQUA PODS', 'CABANAS', 'MANTARAY', 'FARM CELLS', 'OSHUN'];
-  const CATEGORIES = ['TRANSPORT', 'HOSPITALITY', 'LIVING', 'MOBILITY', 'AGRICULTURE', 'RESIDENCE'];
-  const SUBTITLES  = ['design consultation', 'design consultation', 'design consultation', 'design consultation', 'design consultation', 'design consultation'];
+  const CATEGORIES = ['URBAN MOBILITY', 'AMBULATORY', 'LIVING', 'MOBILITY', 'AGRICULTURE', 'RESIDENCE'];
+  const SUBTITLES  = ['Our Developments', 'Our Developments', 'Our Developments', 'Our Developments', 'Our Developments', 'Our Developments'];
   const ITEM_H  = 380;
   const GAP     = 24;
   const STEP    = ITEM_H + GAP;
@@ -3743,7 +4249,8 @@ tickRipple();
   updateCarousel(0);
 
   // hero item index → products slide data-index
-  const SLIDE_MAP = [1, 2, 3, 5, 4, 0];
+  // hero order: [ORCA, AQUA PODS, CABANAS, MANTARAY, FARM CELLS, OSHUN]
+  const SLIDE_MAP = [0, 2, 3, 5, 4, 1];
 
   // clay model image for each hero item
   const CLAY_MAP = [
@@ -3887,9 +4394,13 @@ tickRipple();
     });
   });
 
-  // Explore Projects button — fires the Oshun → products transition
+  // Explore Projects button — fires the Oshun → products transition.
+  // On mobile, instead scroll into the vertical-swipe products section.
   if (exploreBtn) {
     exploreBtn.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        if (window.openMobileProducts) { e.preventDefault(); window.openMobileProducts(0); return; }
+      }
       if (window._oshunTxFired) return;
       fireTransition(N - 1, e.clientX, e.clientY);
     });
@@ -3957,39 +4468,39 @@ window.addEventListener('scroll', () => {
   const CYCLE = 4200;
   const industries = [
     {
-      name: 'Shorelines',
+      name: 'Floating Suites & Residences',
       num: '01',
-      desc: 'Adaptive coastal and shoreline environments designed for resilience, ecological integration, and long-term habitation where land meets water.',
+      desc: 'Design and deliver floating hospitality assets and residences as permanent, high-performance real estate — not vessels. Optimized for comfort, environmental response, operational efficiency, and multi-jurisdiction deployment.',
       blob: { top: '10%', left: '-12%' },
-      icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M2 19 Q6 13 12 16 Q18 19 22 13"/><path d="M2 15 Q6 9 12 12 Q18 15 22 9"/><line x1="12" y1="3" x2="12" y2="8"/><circle cx="12" cy="3" r="1.5" fill="var(--accent)"/></svg>`
-    },
-    {
-      name: 'Island Lodges',
-      num: '02',
-      desc: 'Premium hospitality environments on and around water, combining exclusive access with adaptive architecture that responds to its island context.',
-      blob: { top: '28%', left: '-18%' },
-      icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M9 20 L9 12 L15 12 L15 20"/><path d="M5 12 L12 5 L19 12"/><path d="M3 20 L21 20"/><path d="M6 12 L6 20"/><path d="M18 12 L18 20"/></svg>`
-    },
-    {
-      name: 'Floating Residence',
-      num: '03',
-      desc: 'Long-term floating residential platforms engineered as permanent assets, not vessels, with full regulatory compliance and adaptive marine systems.',
-      blob: { top: '46%', left: '-8%' },
       icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><rect x="3" y="10" width="18" height="7" rx="1"/><path d="M6 10 L6 7 L18 7 L18 10"/><path d="M9 7 L9 4 L15 4 L15 7"/><path d="M1 20 Q6 16 12 20 Q18 24 23 20"/></svg>`
     },
     {
-      name: 'Water Transport & Tourism',
-      num: '04',
-      desc: 'Marine mobility infrastructure and tourism destinations that bring people to the water through smart routing, experiential design, and sustainable operation.',
-      blob: { top: '64%', left: '-14%' },
+      name: 'Agriculture / Food Security',
+      num: '02',
+      desc: 'Design floating agricultural systems that support food security, sustainability, and blue economy initiatives. Focused on modularity, efficiency, and integration with coastal and offshore environments.',
+      blob: { top: '28%', left: '-18%' },
+      icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M12 21 L12 11"/><path d="M12 13 C12 8 16 5 20 5 C20 10 16 13 12 13Z"/><path d="M12 16 C12 12 8 9 4 9 C4 13 8 16 12 16Z"/></svg>`
+    },
+    {
+      name: 'Urban Mobility',
+      num: '03',
+      desc: 'Design water-based transportation infrastructure, including floating hubs, taxi terminals, and adaptive mobility platforms. Supports efficient coastal connectivity, reduces pressure on land transport networks, and enables future-ready urban water transit systems.',
+      blob: { top: '46%', left: '-8%' },
       icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M4 16 L6 8 L12 6 L18 8 L20 16"/><path d="M2 19 Q6 15 12 19 Q18 23 22 19"/><path d="M12 6 L12 3"/><path d="M9 3 L15 3"/></svg>`
     },
     {
-      name: 'Utilities',
+      name: 'Recreational & Retail',
+      num: '04',
+      desc: 'Design and master-plan adaptive marine developments that unlock new waterfront real estate value across residential, commercial, hospitality, and civic uses. Built around smart kinetic architecture, these water-based ecosystems respond to changing climate, temperature, and operational conditions, creating flexible assets with stronger long-term performance, regulatory resilience, and multiple revenue layers beyond single-use development.',
+      blob: { top: '64%', left: '-14%' },
+      icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M9 20 L9 12 L15 12 L15 20"/><path d="M5 12 L12 5 L19 12"/><path d="M3 20 L21 20"/><path d="M6 12 L6 20"/><path d="M18 12 L18 20"/></svg>`
+    },
+    {
+      name: 'Entertainment',
       num: '05',
-      desc: 'Marine-deployed utility infrastructure covering energy, water treatment, and service systems that integrate into floating and coastal environments with minimal footprint.',
+      desc: 'Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance. Blends experience design with environmental sensitivity and regulatory compliance.',
       blob: { top: '78%', left: '-6%' },
-      icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><circle cx="12" cy="12" r="3.5"/><path d="M12 2 L12 6M12 18 L12 22M4.22 4.22 L7.05 7.05M16.95 16.95 L19.78 19.78M2 12 L6 12M18 12 L22 12M4.22 19.78 L7.05 16.95M16.95 7.05 L19.78 4.22"/></svg>`
+      icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M12 12 L12 21"/><path d="M5 12 Q12 4 19 12 Z"/><path d="M12 12 L12 8"/><circle cx="12" cy="6" r="1.4" fill="var(--accent)"/></svg>`
     },
   ];
 
@@ -4088,6 +4599,161 @@ window.addEventListener('scroll', () => {
   timer = setTimeout(cycle, CYCLE);
 })();
 
+// ─── Mobile hero clay carousel (horizontal swipe)
+(function() {
+  const carousel = document.getElementById('heroMCarousel');
+  const track    = document.getElementById('heroMTrack');
+  if (!carousel || !track) return;
+
+  const items    = Array.from(track.querySelectorAll('.hero-m-item'));
+  const catEl    = document.getElementById('heroMCategory');
+  const nameEl   = document.getElementById('heroMName');
+  const dotsWrap = document.getElementById('heroMDots');
+  const arrowL   = document.getElementById('heroMArrowL');
+  const arrowR   = document.getElementById('heroMArrowR');
+  if (!items.length) return;
+
+  // Build dots
+  const dots = items.map((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'hero-m-dot';
+    d.addEventListener('click', () => scrollToItem(i));
+    dotsWrap.appendChild(d);
+    return d;
+  });
+
+  let current = -1;
+
+  function setActive(idx) {
+    if (idx === current) return;
+    current = idx;
+    items.forEach((it, i) => it.classList.toggle('is-active', i === idx));
+    dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
+    const active = items[idx];
+    if (catEl)  catEl.textContent  = active.dataset.cat  || '';
+    if (nameEl) nameEl.textContent = active.dataset.name || '';
+    // Dim arrows at the ends
+    if (arrowL) arrowL.style.opacity = idx <= 0 ? '0.25' : '1';
+    if (arrowR) arrowR.style.opacity = idx >= items.length - 1 ? '0.25' : '1';
+  }
+
+  function scrollToItem(i) {
+    const item = items[i];
+    const left = item.offsetLeft - (track.clientWidth - item.clientWidth) / 2;
+    track.scrollTo({ left, behavior: 'smooth' });
+  }
+
+  if (arrowL) arrowL.addEventListener('click', () => scrollToItem(Math.max(0, current - 1)));
+  if (arrowR) arrowR.addEventListener('click', () => scrollToItem(Math.min(items.length - 1, current + 1)));
+
+  // Find item whose centre is nearest the track centre
+  function nearestIndex() {
+    const centre = track.scrollLeft + track.clientWidth / 2;
+    let best = 0, bestDist = Infinity;
+    items.forEach((it, i) => {
+      const itemCentre = it.offsetLeft + it.clientWidth / 2;
+      const dist = Math.abs(itemCentre - centre);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
+  }
+
+  let raf = null;
+  track.addEventListener('scroll', () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      setActive(nearestIndex());
+    });
+  }, { passive: true });
+
+  // Initialise (after layout settles)
+  requestAnimationFrame(() => setActive(nearestIndex()));
+
+  // Tapping a hero clay model opens the products overlay at that product (same order)
+  items.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      if (!window.matchMedia('(max-width: 1024px)').matches) return;
+      if (window.openMobileProducts) window.openMobileProducts(i);
+    });
+  });
+})();
+
+// ─── Mobile products section (vertical-swipe overlay) — open/close + progress rail
+(function() {
+  const section = document.getElementById('productsM');
+  const rail    = document.getElementById('pmProgress');
+  const closeBtn = document.getElementById('pmClose');
+  if (!section || !rail) return;
+
+  const cards = Array.from(section.querySelectorAll('.products-m-card'));
+  if (!cards.length) return;
+
+  // Build progress dots
+  const dots = cards.map(() => {
+    const d = document.createElement('span');
+    d.className = 'pm-progress-dot';
+    rail.appendChild(d);
+    return d;
+  });
+
+  let current = -1;
+  function setActive(idx) {
+    if (idx === current) return;
+    current = idx;
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+  }
+
+  function nearestIndex() {
+    const centre = section.scrollTop + section.clientHeight / 2;
+    let best = 0, bestDist = Infinity;
+    cards.forEach((c, i) => {
+      const cCentre = c.offsetTop + c.clientHeight / 2;
+      const dist = Math.abs(cCentre - centre);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
+  }
+
+  let raf = null;
+  section.addEventListener('scroll', () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      setActive(nearestIndex());
+    });
+  }, { passive: true });
+
+  // ── Open / close the overlay ──
+  function open(idx) {
+    const i = idx || 0;
+    section.classList.add('is-open');
+    rail.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';   // lock page behind the overlay
+    // Jump (no animation) to the requested product once layout is ready
+    requestAnimationFrame(() => {
+      const target = cards[i];
+      section.scrollTop = target ? target.offsetTop : 0;
+      setActive(i);
+    });
+  }
+  function close() {
+    section.classList.remove('is-open');
+    rail.classList.remove('is-visible');
+    document.body.style.overflow = '';
+  }
+
+  // Expose opener for the hero "Explore" button and clay-model taps
+  window.openMobileProducts = open;
+
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  // Close on Escape (and any hardware back that maps to it)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && section.classList.contains('is-open')) close();
+  });
+
+  setActive(0);
+})();
 
 </script>
 </div><!-- /pageWrap -->
