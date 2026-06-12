@@ -1071,12 +1071,12 @@ nav {
 }
 
 /* Aqua Pods iso — flip to match clay orientation */
-.slider-slide[data-index="2"] .model-iso {
+.slider-slide[data-index="1"] .model-iso {
   transform: scaleX(-1);
 }
 
 /* Mantaray iso — flip to match clay orientation */
-.slider-slide[data-index="5"] .model-iso {
+.slider-slide[data-index="3"] .model-iso {
   transform: scaleX(-1);
 }
 
@@ -1573,6 +1573,7 @@ nav {
   background: #0c1a1c;
   display: block;
 }
+.statement-video-m { display: none; }
 
 
 
@@ -2361,6 +2362,13 @@ footer {
     font-weight: 600;
     color: #fff;
   }
+  .hero-m-sub {
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+  }
   .hero-m-dots {
     display: flex;
     justify-content: center;
@@ -2581,19 +2589,45 @@ footer {
   /* Statement tagline */
   .statement-tagline-inner { padding: 0 24px; }
 
-  /* Statement / Acclimation */
+  /* Statement / Acclimation — static 16:9 video, centered, text underneath */
+  .statement-outer { height: auto; }
+  .statement {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 56px 24px;
+  }
   .statement-acclimation-text {
-    left: 24px;
-    right: 24px;
-    top: 80px;
+    position: static;
+    order: 2;
+    left: auto;
+    right: auto;
+    top: auto;
     max-width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
   }
   .statement-acclimation-text p { font-size: 15px; line-height: 1.65; }
   .statement-video-wrap {
-    width: 90%;
-    height: 40%;
-    bottom: 16px;
-    right: 5%;
+    position: static;
+    order: 1;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    bottom: auto;
+    right: auto;
+    border-radius: 6px;
+    box-shadow: none;
+  }
+  .statement-video-placeholder { display: none; }
+  .statement-video-m {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .statement-text { font-size: clamp(28px, 8vw, 52px); letter-spacing: -1.5px; }
   .statement-text-lead { font-size: clamp(18px, 5vw, 32px); letter-spacing: -0.5px; }
@@ -2825,12 +2859,12 @@ footer {
   <!-- Mobile-only: horizontal swipe carousel of clay product models -->
   <div class="hero-m-carousel" id="heroMCarousel" aria-label="Products">
     <div class="hero-m-track" id="heroMTrack">
-      <div class="hero-m-item" data-i="0" data-cat="URBAN MOBILITY" data-name="ORCA"><img decoding="async" src="assets/Product-Clay/orca-clay.png" alt="ORCA"></div>
-      <div class="hero-m-item" data-i="1" data-cat="AMBULATORY"  data-name="AQUA PODS"><img loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay.png" alt="AQUA PODS"></div>
-      <div class="hero-m-item" data-i="2" data-cat="LIVING"       data-name="CABANAS"><img loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay.png" alt="CABANAS"></div>
-      <div class="hero-m-item" data-i="3" data-cat="MOBILITY"     data-name="MANTARAY"><img loading="lazy" decoding="async" src="assets/Product-Clay/Mantaray Clay.png" alt="MANTARAY"></div>
-      <div class="hero-m-item" data-i="4" data-cat="AGRICULTURE"  data-name="FARM CELLS"><img loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay.png" alt="FARM CELLS"></div>
-      <div class="hero-m-item" data-i="5" data-cat="RESIDENCE"    data-name="OSHUN"><img loading="lazy" decoding="async" src="assets/Product-Clay/Oshun Clay 2.png" alt="OSHUN"></div>
+      <div class="hero-m-item" data-i="0" data-cat="URBAN MOBILITY" data-sub="Our Developments" data-name="ORCA"><img decoding="async" src="assets/Product-Clay/orca-clay.png" alt="ORCA"></div>
+      <div class="hero-m-item" data-i="1" data-cat="RETAIL, AMBULATORY &amp; FUELING"  data-sub="Our Developments" data-name="AQUA PODS"><img loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay.png" alt="AQUA PODS"></div>
+      <div class="hero-m-item" data-i="2" data-cat="FLOATING SUITES &amp; RESIDENCES"       data-sub="Design and Consultancy" data-name="CABANAS"><img loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay.png" alt="CABANAS"></div>
+      <div class="hero-m-item" data-i="3" data-cat="FLOATING SUITES &amp; RESIDENCES"     data-sub="Design and Consultancy" data-name="MANTARAY"><img loading="lazy" decoding="async" src="assets/Product-Clay/Mantaray Clay.png" alt="MANTARAY"></div>
+      <div class="hero-m-item" data-i="4" data-cat="AGRICULTURE / FOOD SECURITY"  data-sub="Our Developments" data-name="FARM CELLS"><img loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay.png" alt="FARM CELLS"></div>
+      <div class="hero-m-item" data-i="5" data-cat="ENTERTAINMENT"    data-sub="Design and Consultancy" data-name="OSHUN"><img loading="lazy" decoding="async" src="assets/Product-Clay/Oshun Clay 2.png" alt="OSHUN"></div>
     </div>
     <button class="hero-m-arrow hero-m-arrow-left" id="heroMArrowL" aria-label="Previous product">
       <svg viewBox="0 0 24 24"><polyline points="15 5 8 12 15 19"/></svg>
@@ -2841,6 +2875,7 @@ footer {
     <div class="hero-m-meta">
       <span class="hero-m-category" id="heroMCategory">URBAN MOBILITY</span>
       <span class="hero-m-name" id="heroMName">ORCA</span>
+      <span class="hero-m-sub" id="heroMSub">Our Developments</span>
     </div>
     <div class="hero-m-dots" id="heroMDots"></div>
   </div>
@@ -2919,7 +2954,6 @@ footer {
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
             </div>
-            <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
             <div class="slide-label">URBAN MOBILITY</div>
@@ -2954,61 +2988,8 @@ footer {
         </div>
       </div>
 
-      <!-- SLIDE 02: OSHUN -->
+      <!-- SLIDE 02: AQUA PODS -->
       <div class="slider-slide" data-index="1">
-        <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/Oshun 1 .png" alt="Oshun">
-          <div class="slide-callouts">
-            <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Modular Floating Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-            <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Garden Terraces & Planting</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-            <div class="slide-callout" style="top:72%"><span class="slide-callout-label">Water Feature Seating</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-          </div>
-        </div>
-        <div class="slide-panel">
-          <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/Oshun Clay 2.png" alt="Oshun clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/ohsun-iso.png" alt="Oshun isometric">
-            <div class="slide-model-toggle">
-              <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
-              <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
-            </div>
-            <span class="slide-model-hint">Click to toggle view</span>
-          </div>
-          <div class="slide-panel-text">
-            <div class="slide-label">FLOATING SUITES &amp; RESIDENCES</div>
-            <h2 class="slide-name">OSHUN</h2>
-            <div class="slide-mooring">Selfpropelled</div>
-            <p class="slide-desc">Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance.</p>
-            <p class="slide-desc">Blends experience design with environmental sensitivity and regulatory compliance.</p>
-            <div class="slide-specs">
-              <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="2">0</span><span class="slide-spec-unit"></span></div>
-                <span class="slide-spec-label">Design Stage</span>
-              </div>
-              <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="3">0</span><span class="slide-spec-unit"></span></div>
-                <span class="slide-spec-label">Deck Levels</span>
-              </div>
-              <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="200">0</span><span class="slide-spec-unit">+</span></div>
-                <span class="slide-spec-label">Guests</span>
-              </div>
-            </div>
-            <div class="slide-tags">
-              <span class="slide-tag">Floating Beach Club</span>
-              <span class="slide-tag">Marine Hospitality</span>
-              <span class="slide-tag">Sacred Design</span>
-            </div>
-            <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
-              <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept Design</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 03: AQUA PODS -->
-      <div class="slider-slide" data-index="2">
         <div class="slide-main">
           <img class="slide-main-img" src="assets/Product-Images/AquaPod - Adnoc.png" alt="Aqua Pods">
           <div class="slide-callouts">
@@ -3025,10 +3006,9 @@ footer {
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
             </div>
-            <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">AMBULATORY</div>
+            <div class="slide-label">RETAIL, AMBULATORY &amp; FUELING</div>
             <h2 class="slide-name">AQUA<br>PODS</h2>
             <p class="slide-desc">Floating, self-contained marine hospitality and commercial units designed to operate as mobile venues on water. Aqua Pods introduce a new typology of floating architecture combining entertainment, dining, and experiential spaces within a compact, technologically integrated pod.</p>
             <div class="slide-specs">
@@ -3058,8 +3038,8 @@ footer {
         </div>
       </div>
 
-      <!-- SLIDE 04: FLOATING CABANAS -->
-      <div class="slider-slide" data-index="3">
+      <!-- SLIDE 03: FLOATING CABANAS -->
+      <div class="slider-slide" data-index="2">
         <div class="slide-main">
           <img class="slide-main-img" src="assets/Product-Images/cabana.png" alt="Floating Cabanas">
           <div class="slide-callouts">
@@ -3076,10 +3056,9 @@ footer {
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
             </div>
-            <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">HOTEL FLOATING CABANAS</div>
+            <div class="slide-label">FLOATING SUITES &amp; RESIDENCES</div>
             <h2 class="slide-name">FLOATING<br>CABANAS</h2>
             <div class="slide-mooring">Permanent Mooring</div>
             <p class="slide-desc">Design floating leisure infrastructure, including private cabanas, shaded lounge platforms, and adaptable waterfront hospitality units.</p>
@@ -3111,6 +3090,56 @@ footer {
         </div>
       </div>
 
+      <!-- SLIDE 04: MANTARAY -->
+      <div class="slider-slide" data-index="3">
+        <div class="slide-main">
+          <img class="slide-main-img" src="assets/Product-Images/Mantaray 1.png" alt="Mantaray">
+          <div class="slide-callouts">
+            <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar-Harvesting Roof Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Recyclable HDPE Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:72%"><span class="slide-callout-label">Smart Navigation System</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+          </div>
+        </div>
+        <div class="slide-panel">
+          <div class="slide-panel-model" data-model="clay">
+            <img class="slide-model-img model-clay" src="assets/Product-Clay/Mantaray Clay.png" alt="Mantaray clay model">
+            <img class="slide-model-img model-iso"  src="assets/Product-iso/mantaray-iso.png" alt="Mantaray isometric">
+            <div class="slide-model-toggle">
+              <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
+              <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
+            </div>
+          </div>
+          <div class="slide-panel-text">
+            <div class="slide-label">FLOATING SUITES &amp; RESIDENCES</div>
+            <h2 class="slide-name">MANTARAY</h2>
+            <p class="slide-desc">A solar-powered electric passenger vessel designed for Abu Dhabi's coastal waters. Mantaray redefines water-taxi transportation with zero fuel consumption, silent electric propulsion, and a recyclable HDPE body, delivering an immersive panoramic travel experience with minimal environmental impact.</p>
+            <div class="slide-specs">
+              <div class="slide-spec">
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="22">0</span><span class="slide-spec-unit">m</span></div>
+                <span class="slide-spec-label">Length</span>
+              </div>
+              <div class="slide-spec">
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="12">0</span><span class="slide-spec-unit"></span></div>
+                <span class="slide-spec-label">Passengers</span>
+              </div>
+              <div class="slide-spec">
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="28">0</span><span class="slide-spec-unit">kn</span></div>
+                <span class="slide-spec-label">Max Speed</span>
+              </div>
+            </div>
+            <div class="slide-tags">
+              <span class="slide-tag">Solar-Powered</span>
+              <span class="slide-tag">Electric Drive</span>
+              <span class="slide-tag">Water Taxi</span>
+            </div>
+            <div class="slide-footer">
+              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SLIDE 05: FLOATING FARM CELLS -->
       <div class="slider-slide" data-index="4">
         <div class="slide-main">
@@ -3129,10 +3158,9 @@ footer {
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
             </div>
-            <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">AGRICULTURE</div>
+            <div class="slide-label">AGRICULTURE / FOOD SECURITY</div>
             <h2 class="slide-name">FLOATING<br>FARM CELLS</h2>
             <div class="slide-mooring">Permanent Mooring</div>
             <p class="slide-desc">Design floating agricultural systems that support food security, sustainability, and blue economy initiatives.</p>
@@ -3164,52 +3192,53 @@ footer {
         </div>
       </div>
 
-      <!-- SLIDE 06: MANTARAY -->
+      <!-- SLIDE 06: OSHUN -->
       <div class="slider-slide" data-index="5">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/Mantaray 1.png" alt="Mantaray">
+          <img class="slide-main-img" src="assets/Product-Images/Oshun 1 .png" alt="Oshun">
           <div class="slide-callouts">
-            <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar-Harvesting Roof Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-            <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Recyclable HDPE Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
-            <div class="slide-callout" style="top:72%"><span class="slide-callout-label">Smart Navigation System</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Modular Floating Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Garden Terraces & Planting</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
+            <div class="slide-callout" style="top:72%"><span class="slide-callout-label">Water Feature Seating</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
           </div>
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/Mantaray Clay.png" alt="Mantaray clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/mantaray-iso.png" alt="Mantaray isometric">
+            <img class="slide-model-img model-clay" src="assets/Product-Clay/Oshun Clay 2.png" alt="Oshun clay model">
+            <img class="slide-model-img model-iso"  src="assets/Product-iso/ohsun-iso.png" alt="Oshun isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
             </div>
-            <span class="slide-model-hint">Click to toggle view</span>
           </div>
           <div class="slide-panel-text">
-            <div class="slide-label">MARINE MOBILITY</div>
-            <h2 class="slide-name">MANTARAY</h2>
-            <p class="slide-desc">A solar-powered electric passenger vessel designed for Abu Dhabi's coastal waters. Mantaray redefines water-taxi transportation with zero fuel consumption, silent electric propulsion, and a recyclable HDPE body, delivering an immersive panoramic travel experience with minimal environmental impact.</p>
+            <div class="slide-label">ENTERTAINMENT</div>
+            <h2 class="slide-name">OSHUN</h2>
+            <div class="slide-mooring">Selfpropelled</div>
+            <p class="slide-desc">Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance.</p>
+            <p class="slide-desc">Blends experience design with environmental sensitivity and regulatory compliance.</p>
             <div class="slide-specs">
               <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="22">0</span><span class="slide-spec-unit">m</span></div>
-                <span class="slide-spec-label">Length</span>
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="2">0</span><span class="slide-spec-unit"></span></div>
+                <span class="slide-spec-label">Design Stage</span>
               </div>
               <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="12">0</span><span class="slide-spec-unit"></span></div>
-                <span class="slide-spec-label">Passengers</span>
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="3">0</span><span class="slide-spec-unit"></span></div>
+                <span class="slide-spec-label">Deck Levels</span>
               </div>
               <div class="slide-spec">
-                <div class="slide-spec-number"><span class="slide-spec-value" data-target="28">0</span><span class="slide-spec-unit">kn</span></div>
-                <span class="slide-spec-label">Max Speed</span>
+                <div class="slide-spec-number"><span class="slide-spec-value" data-target="200">0</span><span class="slide-spec-unit">+</span></div>
+                <span class="slide-spec-label">Guests</span>
               </div>
             </div>
             <div class="slide-tags">
-              <span class="slide-tag">Solar-Powered</span>
-              <span class="slide-tag">Electric Drive</span>
-              <span class="slide-tag">Water Taxi</span>
+              <span class="slide-tag">Floating Beach Club</span>
+              <span class="slide-tag">Marine Hospitality</span>
+              <span class="slide-tag">Sacred Design</span>
             </div>
             <div class="slide-footer">
               <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
-              <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept</span></div>
+              <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept Design</span></div>
             </div>
           </div>
         </div>
@@ -3279,7 +3308,7 @@ footer {
   <div class="products-m-card" data-index="1">
     <div class="pm-inner">
       <header class="pm-head">
-        <div class="pm-label">AMBULATORY</div>
+        <div class="pm-label">RETAIL, AMBULATORY &amp; FUELING</div>
         <h2 class="pm-name">AQUA PODS</h2>
       </header>
       <div class="pm-mid">
@@ -3298,7 +3327,7 @@ footer {
   <div class="products-m-card" data-index="2">
     <div class="pm-inner">
       <header class="pm-head">
-        <div class="pm-label">HOTEL FLOATING CABANAS</div>
+        <div class="pm-label">FLOATING SUITES &amp; RESIDENCES</div>
         <h2 class="pm-name">FLOATING CABANAS</h2>
       </header>
       <div class="pm-mid">
@@ -3317,7 +3346,7 @@ footer {
   <div class="products-m-card" data-index="3">
     <div class="pm-inner">
       <header class="pm-head">
-        <div class="pm-label">MARINE MOBILITY</div>
+        <div class="pm-label">FLOATING SUITES &amp; RESIDENCES</div>
         <h2 class="pm-name">MANTARAY</h2>
       </header>
       <div class="pm-mid">
@@ -3336,7 +3365,7 @@ footer {
   <div class="products-m-card" data-index="4">
     <div class="pm-inner">
       <header class="pm-head">
-        <div class="pm-label">AGRICULTURE</div>
+        <div class="pm-label">AGRICULTURE / FOOD SECURITY</div>
         <h2 class="pm-name">FLOATING FARM CELLS</h2>
       </header>
       <div class="pm-mid">
@@ -3355,7 +3384,7 @@ footer {
   <div class="products-m-card" data-index="5">
     <div class="pm-inner">
       <header class="pm-head">
-        <div class="pm-label">FLOATING SUITES &amp; RESIDENCES</div>
+        <div class="pm-label">ENTERTAINMENT</div>
         <h2 class="pm-name">OSHUN</h2>
       </header>
       <div class="pm-mid">
@@ -3470,6 +3499,10 @@ footer {
   <div class="statement-video-wrap">
     <!-- VIDEO PLACEHOLDER: replace src with hosted video URL when available -->
     <div class="statement-video-placeholder"></div>
+    <!-- Mobile-only: real 16:9 playing video -->
+    <video class="statement-video-m" autoplay loop muted playsinline preload="metadata">
+      <source src="assets/Acclimation/2.mp4" type="video/mp4">
+    </video>
   </div>
 
 </section>
@@ -3524,8 +3557,8 @@ footer {
       </div>
       <div class="serv-slide" data-index="3">
         <div class="serv-slide-left">
-          <div class="serv-slide-label">04 PARTNERSHIP &amp; DEPLOYMENT</div>
-          <div class="serv-slide-name">Partnership &amp; Deployment</div>
+          <div class="serv-slide-label">04 PARTNERSHIP &amp; DEVELOPMENT</div>
+          <div class="serv-slide-name">Partnership &amp; Development</div>
           <div class="serv-slide-desc">Development of proprietary modular systems, materials, and adaptive design IP in collaboration with governments, developers, and institutions.</div>
           <a class="serv-contact-btn">
             <span class="serv-contact-btn-text">Get Started</span>
@@ -4189,8 +4222,8 @@ tickRipple();
   if (!outer || !track) return;
 
   const NAMES      = ['ORCA', 'AQUA PODS', 'CABANAS', 'MANTARAY', 'FARM CELLS', 'OSHUN'];
-  const CATEGORIES = ['URBAN MOBILITY', 'AMBULATORY', 'LIVING', 'MOBILITY', 'AGRICULTURE', 'RESIDENCE'];
-  const SUBTITLES  = ['Our Developments', 'Our Developments', 'Our Developments', 'Our Developments', 'Our Developments', 'Our Developments'];
+  const CATEGORIES = ['URBAN MOBILITY', 'RETAIL, AMBULATORY & FUELING', 'FLOATING SUITES & RESIDENCES', 'FLOATING SUITES & RESIDENCES', 'AGRICULTURE / FOOD SECURITY', 'ENTERTAINMENT'];
+  const SUBTITLES  = ['Our Developments', 'Our Developments', 'Design and Consultancy', 'Design and Consultancy', 'Our Developments', 'Design and Consultancy'];
   const ITEM_H  = 380;
   const GAP     = 24;
   const STEP    = ITEM_H + GAP;
@@ -4250,7 +4283,8 @@ tickRipple();
 
   // hero item index → products slide data-index
   // hero order: [ORCA, AQUA PODS, CABANAS, MANTARAY, FARM CELLS, OSHUN]
-  const SLIDE_MAP = [0, 2, 3, 5, 4, 1];
+  // Slides are now physically ordered to match the hero, so this is a 1:1 map.
+  const SLIDE_MAP = [0, 1, 2, 3, 4, 5];
 
   // clay model image for each hero item
   const CLAY_MAP = [
@@ -4437,6 +4471,8 @@ window.addEventListener('scroll', () => {
   if (!outer || !videoWrap) return;
 
   window.addEventListener('scroll', () => {
+    // Mobile: static centered video, no scroll-driven expansion
+    if (window.matchMedia('(max-width: 1024px)').matches) return;
     const rect  = outer.getBoundingClientRect();
     const total = outer.offsetHeight - window.innerHeight;
     const p     = Math.max(0, Math.min(1, -rect.top / total));
@@ -4608,6 +4644,7 @@ window.addEventListener('scroll', () => {
   const items    = Array.from(track.querySelectorAll('.hero-m-item'));
   const catEl    = document.getElementById('heroMCategory');
   const nameEl   = document.getElementById('heroMName');
+  const subEl    = document.getElementById('heroMSub');
   const dotsWrap = document.getElementById('heroMDots');
   const arrowL   = document.getElementById('heroMArrowL');
   const arrowR   = document.getElementById('heroMArrowR');
@@ -4632,6 +4669,7 @@ window.addEventListener('scroll', () => {
     const active = items[idx];
     if (catEl)  catEl.textContent  = active.dataset.cat  || '';
     if (nameEl) nameEl.textContent = active.dataset.name || '';
+    if (subEl)  subEl.textContent  = active.dataset.sub  || '';
     // Dim arrows at the ends
     if (arrowL) arrowL.style.opacity = idx <= 0 ? '0.25' : '1';
     if (arrowR) arrowR.style.opacity = idx >= items.length - 1 ? '0.25' : '1';
