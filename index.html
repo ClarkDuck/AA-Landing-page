@@ -10,7 +10,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600&family=Oswald:wght@300;400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600&family=Oswald:wght@300;400&display=swap"></noscript>
 <!-- Preload the ORCA hero thumbnail (LCP candidate) -->
-<link rel="preload" as="image" href="assets/Product-Clay/orca-clay-768.webp" imagesrcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w" imagesizes="(max-width: 1024px) 42vw, 400px">
+<link rel="preload" as="image" href="assets/Product-Clay/orca-clay-768.webp" imagesrcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w, assets/Product-Clay/orca-clay-1024.webp 1024w" imagesizes="(max-width: 1024px) 42vw, 400px">
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -159,6 +159,7 @@ a, button, [role="button"], [tabindex] { outline-color: var(--accent); }
 }
 .intro-ribbon-logo {
   height: 72px;
+  width: auto;
   object-fit: contain;
   flex-shrink: 0;
   filter: brightness(0) invert(1);
@@ -306,7 +307,9 @@ nav {
 .nav-logo {
   position: relative;
   z-index: 1;
+  top: 8px;
   height: 50px;
+  width: auto;
 }
 .nav-aa {
   position: relative;
@@ -356,7 +359,7 @@ nav {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #060e0f url('assets/BackGrounds/hero-bg.webp') center / cover no-repeat;
+  background: #060e0f url('assets/BackGrounds/hero-poster.webp') center / cover no-repeat;
 }
 .hero-bg video {
   position: absolute;
@@ -377,7 +380,7 @@ nav {
 }
 .hero-content {
   position: absolute;
-  left: 80px;
+  left: max(80px, calc(50vw - 760px));   /* pull in from the edge on ultra-wide screens */
   top: 50%;
   transform: translateY(-50%);
   z-index: 10000;
@@ -392,6 +395,7 @@ nav {
 .hero-content.hero-content-interactive { pointer-events: auto; }
 .hero-logo-main {
   width: 480px;
+  height: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 32px rgba(4,202,130,0.10));
   margin-left: -130px;
@@ -1181,11 +1185,13 @@ nav {
 .slider-progress {
   position: absolute;
   bottom: 44px;
-  left: calc(45% + 56px);
+  left: 22.5%;                 /* centre of the 45%-wide product image column */
+  transform: translateX(-50%);
   z-index: 20;
   pointer-events: none;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 .slider-progress-dots {
@@ -1567,7 +1573,7 @@ nav {
 .statement-acclimation-text {
   position: absolute;
   top: 60px;
-  left: 80px;
+  left: 50px;              /* align with the What We Do section's text above */
   z-index: 5;
   max-width: 640px;
   transition: opacity 0.15s ease, transform 0.15s ease;
@@ -1841,7 +1847,7 @@ nav {
   background:
     linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
     linear-gradient(rgb(41,56,57) 0%, rgba(0,0,0,0) 35%, rgb(41,56,57) 95%),
-    url('assets/BackGrounds/cta-bg.webp') center / cover no-repeat;
+    url('assets/BackGrounds/cta-bg-opt.webp') center / cover no-repeat;
 }
 .cta-content {
   position: relative;
@@ -1887,7 +1893,7 @@ footer {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 60px;
 }
-.footer-logo { height: 60px; margin-bottom: 20px; display: block; }
+.footer-logo { height: 60px; width: auto; margin-bottom: 20px; display: block; }
 .footer-tagline {
   font-family: 'Montserrat', sans-serif;
   font-size: 13px;
@@ -2059,7 +2065,7 @@ footer {
 /* ─── HERO BLOB + VERTICAL CAROUSEL ─── */
 .hero-blob-wrap {
   position: absolute;
-  right: -180px;
+  right: -240px;             /* bleed further off the right edge */
   top: 50%;
   transform: translateY(-50%);
   width: 1100px;
@@ -2090,7 +2096,7 @@ footer {
   border-radius: 50%;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.2);
-  display: flex;
+  display: none;             /* arrow removed */
   align-items: center;
   justify-content: center;
   z-index: 6;
@@ -2104,7 +2110,7 @@ footer {
 .hero-vert-viewport {
   position: absolute;
   top: 50%;
-  left: 50%;               /* centre products in the panel so labels don't clip the screen edge */
+  left: 62%;
   width: 400px;
   transform: translate(-50%, 0);
 }
@@ -2112,24 +2118,19 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 160px;            /* room for each product's label; must match JS GAP */
+  gap: 24px;
   will-change: transform;
 }
 .hero-vert-item {
-  position: relative;              /* label positions against this */
   width: 380px;
   height: 380px;
   flex: 0 0 380px;
+  border-radius: 50%;
+  overflow: hidden;
   transform-origin: center center;
   will-change: transform, opacity;
   pointer-events: auto;
   cursor: pointer;
-}
-.hero-vert-circle {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
 }
 .hero-vert-item img {
   width: 100%;
@@ -2137,52 +2138,34 @@ footer {
   object-fit: cover;
   filter: url('#removeDarkBg') brightness(1.45) saturate(1.3) contrast(1.05);
 }
-/* Per-product label — sits under its own circle and scales/fades with it */
-.hero-vert-label {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 18px;
-  width: 400px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 9px;
-  pointer-events: none;
-}
-.hero-vert-label .hero-vert-consult { pointer-events: auto; }
+/* Farm Cells (FFC) clay art sits small in its frame — scale it up to match the others */
+.hero-vert-item[data-i="4"] img,
+.hero-m-item[data-i="4"] img { transform: scale(1.22); }
 .hero-vert-meta {
   position: absolute;
-  /* Product's active centre sits at the viewport origin; drop the label just
-     below the 380px circle. Centred on the product, width-capped so it can't
-     run off the screen edge. */
-  top: 208px;
-  left: 50%;
-  width: 400px;
-  max-width: 92vw;
-  transform: translateX(-50%);
-  text-align: center;
+  top: 50%;
+  left: 64px;
+  max-width: 340px;              /* capped so text can't reach/overlap the product */
+  transform: translateY(-50%);
+  text-align: left;
   pointer-events: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  z-index: 6;
+  align-items: flex-start;
+  gap: 8px;
 }
 .hero-vert-title-row {
   display: block;
 }
 .hero-vert-combined {
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(14px, 1.2vw, 19px);
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  color: #ffffff;
-  white-space: nowrap;
-  line-height: 1;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 20px rgba(0,0,0,0.75);
+  font-size: clamp(16px, 1.4vw, 22px);
+  font-weight: 200;
+  letter-spacing: 0px;
+  color: rgba(255,255,255,0.95);
+  white-space: normal;           /* wrap long category names instead of overlapping the product */
+  line-height: 1.15;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
   padding: 0;
   margin: 0;
 }
@@ -2191,23 +2174,22 @@ footer {
   text-transform: uppercase;
 }
 .hero-vert-pipe {
-  font-weight: 300;
-  color: rgba(255,255,255,0.45);
-  margin: 0 4px;
+  font-weight: 200;
+  color: rgba(255,255,255,0.2);
+  margin: 0 2px;
 }
 .hero-vert-name {
-  color: #ffffff;
+  color: rgba(255,255,255,0.95);
   text-transform: uppercase;
 }
 .hero-vert-sub {
   font-family: 'Montserrat', sans-serif;
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 8px;
+  font-weight: 400;
   letter-spacing: 3px;
-  color: #ffffff;
+  color: rgba(255,255,255,1);
   text-transform: uppercase;
   white-space: nowrap;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.9);
   padding: 0;
   margin: 0;
 }
@@ -2215,7 +2197,7 @@ footer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: center;
+  align-self: flex-start;
   padding: 7px 16px;
   background: transparent;
   color: var(--accent);
@@ -2835,7 +2817,7 @@ footer {
 
   <!-- Slide 1: Logo -->
   <div class="intro-slide active" id="introSlide1">
-    <img id="introLogo" src="assets/Logos/logo-704.webp" width="704" height="448" alt="Aquatic Architects">
+    <img id="introLogo" src="assets/Logos/logo-960.webp" width="960" height="611" alt="Aquatic Architects">
   </div>
 
   <!-- Slide 2: Awards / partner ribbon -->
@@ -2912,7 +2894,7 @@ footer {
 
 <!-- Oshun transition overlay: outside pageWrap so it's in the DOM before the script runs -->
 <div id="oshunTransition">
-  <img src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="">
+  <img src="assets/Product-Clay/oshun-clay-768.webp" width="768" height="768" alt="">
   <div class="txoc" id="txoc">
     <span class="txoc-label" id="txocLabel"></span>
     <div class="txoc-name"  id="txocName"></div>
@@ -2929,7 +2911,7 @@ footer {
 <!-- NAV -->
 <nav>
   <div class="nav-bar"></div>
-  <img src="assets/Logos/logo-704.webp" width="704" height="448" alt="AA" class="nav-logo">
+  <img src="assets/Logos/logo-192.webp" width="192" height="122" alt="AA" class="nav-logo">
   <span class="nav-aa">AA</span>
   <div class="nav-hamburger">
     <span></span><span></span><span></span>
@@ -2964,13 +2946,13 @@ footer {
 <div class="hero-outer" id="heroOuter">
 <section class="hero" id="hero">
   <div class="hero-content" id="heroContent">
-    <img src="assets/Logos/logo-704.webp" width="704" height="448" alt="Aquatic Architects" class="hero-logo-main">
+    <img src="assets/Logos/logo-960.webp" width="960" height="611" alt="Aquatic Architects" class="hero-logo-main">
     <div class="hero-tagline">
       <p>Since 2017, Aquatic Architects has been redefining life on water from the UAE to the world, across floating architecture, marine design, and master planning for coasts and islands.</p>
     </div>
   </div>
   <div class="hero-bg" style="filter:url('#water')">
-    <video autoplay loop muted playsinline preload="none" poster="assets/BackGrounds/hero-bg.webp">
+    <video autoplay loop muted playsinline preload="none" poster="assets/BackGrounds/hero-poster.webp">
       <source data-src="assets/BackGrounds/background-loop-opt.webm" type="video/webm">
     </video>
   </div>
@@ -2979,12 +2961,12 @@ footer {
   <!-- Mobile-only: horizontal swipe carousel of clay product models -->
   <div class="hero-m-carousel" id="heroMCarousel" aria-label="Products">
     <div class="hero-m-track" id="heroMTrack">
-      <div class="hero-m-item" data-i="0" data-cat="URBAN MOBILITY" data-sub="Our Developments" data-name="ORCA"><img decoding="async" fetchpriority="high" src="assets/Product-Clay/orca-clay-768.webp" srcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="ORCA"></div>
-      <div class="hero-m-item" data-i="1" data-cat="RETAIL, AMBULATORY &amp; FUELING"  data-sub="Our Developments" data-name="AQUA PODS"><img loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay-768.webp" srcset="assets/Product-Clay/aquapod-clay-400.webp 400w, assets/Product-Clay/aquapod-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="AQUA PODS"></div>
-      <div class="hero-m-item" data-i="2" data-cat="FLOATING SUITES &amp; RESIDENCES"       data-sub="Design and Consultancy" data-name="CABANAS"><img loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay-768.webp" srcset="assets/Product-Clay/cabana-clay-400.webp 400w, assets/Product-Clay/cabana-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="CABANAS"></div>
-      <div class="hero-m-item" data-i="3" data-cat="FLOATING SUITES &amp; RESIDENCES"     data-sub="Design and Consultancy" data-name="MANTARAY"><img loading="lazy" decoding="async" src="assets/Product-Clay/mantaray-clay-768.webp" srcset="assets/Product-Clay/mantaray-clay-400.webp 400w, assets/Product-Clay/mantaray-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="MANTARAY"></div>
-      <div class="hero-m-item" data-i="4" data-cat="AGRICULTURE / FOOD SECURITY"  data-sub="Our Developments" data-name="FARM CELLS"><img loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay-768.webp" srcset="assets/Product-Clay/farm-clay-400.webp 400w, assets/Product-Clay/farm-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="FARM CELLS"></div>
-      <div class="hero-m-item" data-i="5" data-cat="ENTERTAINMENT"    data-sub="Design and Consultancy" data-name="OSHUN"><img loading="lazy" decoding="async" src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="OSHUN"></div>
+      <div class="hero-m-item" data-i="0" data-cat="URBAN MOBILITY" data-sub="Our Developments" data-name="ORCA"><img decoding="async" fetchpriority="high" src="assets/Product-Clay/orca-clay-768.webp" srcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w, assets/Product-Clay/orca-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="ORCA"></div>
+      <div class="hero-m-item" data-i="1" data-cat="RETAIL, AMBULATORY &amp; FUELING"  data-sub="Our Developments" data-name="AQUA PODS"><img loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay-768.webp" srcset="assets/Product-Clay/aquapod-clay-400.webp 400w, assets/Product-Clay/aquapod-clay-768.webp 768w, assets/Product-Clay/aquapod-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="AQUA PODS"></div>
+      <div class="hero-m-item" data-i="2" data-cat="FLOATING SUITES &amp; RESIDENCES"       data-sub="Design and Consultancy" data-name="CABANAS"><img loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay-768.webp" srcset="assets/Product-Clay/cabana-clay-400.webp 400w, assets/Product-Clay/cabana-clay-768.webp 768w, assets/Product-Clay/cabana-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="CABANAS"></div>
+      <div class="hero-m-item" data-i="3" data-cat="FLOATING SUITES &amp; RESIDENCES"     data-sub="Design and Consultancy" data-name="MANTARAY"><img loading="lazy" decoding="async" src="assets/Product-Clay/mantaray-clay-768.webp" srcset="assets/Product-Clay/mantaray-clay-400.webp 400w, assets/Product-Clay/mantaray-clay-768.webp 768w, assets/Product-Clay/mantaray-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="MANTARAY"></div>
+      <div class="hero-m-item" data-i="4" data-cat="AGRICULTURE / FOOD SECURITY"  data-sub="Our Developments" data-name="FARM CELLS"><img loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay-768.webp" srcset="assets/Product-Clay/farm-clay-400.webp 400w, assets/Product-Clay/farm-clay-768.webp 768w, assets/Product-Clay/farm-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="FARM CELLS"></div>
+      <div class="hero-m-item" data-i="5" data-cat="ENTERTAINMENT"    data-sub="Design and Consultancy" data-name="OSHUN"><img loading="lazy" decoding="async" src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w, assets/Product-Clay/oshun-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="OSHUN"></div>
     </div>
     <button class="hero-m-arrow hero-m-arrow-left" id="heroMArrowL" aria-label="Previous product">
       <svg viewBox="0 0 24 24"><polyline points="15 5 8 12 15 19"/></svg>
@@ -3004,55 +2986,18 @@ footer {
   <div class="hero-blob-wrap" id="heroBlobWrap">
     <div class="hero-vert-viewport">
       <div class="hero-vert-track" id="heroVertTrack">
-        <div class="hero-vert-item" data-i="0">
-          <div class="hero-vert-circle"><img fetchpriority="high" src="assets/Product-Clay/orca-clay-768.webp" srcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="ORCA"></div>
-          <div class="hero-vert-label">
-            <div class="hero-vert-combined"><span class="hero-vert-category">URBAN MOBILITY</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name">ORCA</span></div>
-            <div class="hero-vert-sub">Our Developments</div>
-            <button class="hero-vert-consult">Consult</button>
-          </div>
-        </div>
-        <div class="hero-vert-item" data-i="1">
-          <div class="hero-vert-circle"><img src="assets/Product-Clay/aquapod-clay-768.webp" srcset="assets/Product-Clay/aquapod-clay-400.webp 400w, assets/Product-Clay/aquapod-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="AQUA PODS"></div>
-          <div class="hero-vert-label">
-            <div class="hero-vert-combined"><span class="hero-vert-category">RETAIL, AMBULATORY &amp; FUELING</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name">AQUA PODS</span></div>
-            <div class="hero-vert-sub">Our Developments</div>
-            <button class="hero-vert-consult">Consult</button>
-          </div>
-        </div>
-        <div class="hero-vert-item" data-i="2">
-          <div class="hero-vert-circle"><img src="assets/Product-Clay/cabana-clay-768.webp" srcset="assets/Product-Clay/cabana-clay-400.webp 400w, assets/Product-Clay/cabana-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="CABANAS"></div>
-          <div class="hero-vert-label">
-            <div class="hero-vert-combined"><span class="hero-vert-category">FLOATING SUITES &amp; RESIDENCES</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name">CABANAS</span></div>
-            <div class="hero-vert-sub">Design and Consultancy</div>
-            <button class="hero-vert-consult">Consult</button>
-          </div>
-        </div>
-        <div class="hero-vert-item" data-i="3">
-          <div class="hero-vert-circle"><img src="assets/Product-Clay/mantaray-clay-768.webp" srcset="assets/Product-Clay/mantaray-clay-400.webp 400w, assets/Product-Clay/mantaray-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="MANTARAY"></div>
-          <div class="hero-vert-label">
-            <div class="hero-vert-combined"><span class="hero-vert-category">FLOATING SUITES &amp; RESIDENCES</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name">MANTARAY</span></div>
-            <div class="hero-vert-sub">Design and Consultancy</div>
-            <button class="hero-vert-consult">Consult</button>
-          </div>
-        </div>
-        <div class="hero-vert-item" data-i="4">
-          <div class="hero-vert-circle"><img src="assets/Product-Clay/farm-clay-768.webp" srcset="assets/Product-Clay/farm-clay-400.webp 400w, assets/Product-Clay/farm-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="FARM CELLS"></div>
-          <div class="hero-vert-label">
-            <div class="hero-vert-combined"><span class="hero-vert-category">AGRICULTURE / FOOD SECURITY</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name">FARM CELLS</span></div>
-            <div class="hero-vert-sub">Our Developments</div>
-            <button class="hero-vert-consult">Consult</button>
-          </div>
-        </div>
-        <div class="hero-vert-item" data-i="5">
-          <div class="hero-vert-circle"><img src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="OSHUN"></div>
-          <div class="hero-vert-label">
-            <div class="hero-vert-combined"><span class="hero-vert-category">ENTERTAINMENT</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name">OSHUN</span></div>
-            <div class="hero-vert-sub">Design and Consultancy</div>
-            <button class="hero-vert-consult">Consult</button>
-          </div>
-        </div>
+        <div class="hero-vert-item" data-i="0"><img fetchpriority="high" src="assets/Product-Clay/orca-clay-768.webp" srcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w, assets/Product-Clay/orca-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="ORCA"></div>
+        <div class="hero-vert-item" data-i="1"><img src="assets/Product-Clay/aquapod-clay-768.webp" srcset="assets/Product-Clay/aquapod-clay-400.webp 400w, assets/Product-Clay/aquapod-clay-768.webp 768w, assets/Product-Clay/aquapod-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="AQUA PODS"></div>
+        <div class="hero-vert-item" data-i="2"><img src="assets/Product-Clay/cabana-clay-768.webp" srcset="assets/Product-Clay/cabana-clay-400.webp 400w, assets/Product-Clay/cabana-clay-768.webp 768w, assets/Product-Clay/cabana-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="CABANAS"></div>
+        <div class="hero-vert-item" data-i="3"><img src="assets/Product-Clay/mantaray-clay-768.webp" srcset="assets/Product-Clay/mantaray-clay-400.webp 400w, assets/Product-Clay/mantaray-clay-768.webp 768w, assets/Product-Clay/mantaray-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="MANTARAY"></div>
+        <div class="hero-vert-item" data-i="4"><img src="assets/Product-Clay/farm-clay-768.webp" srcset="assets/Product-Clay/farm-clay-400.webp 400w, assets/Product-Clay/farm-clay-768.webp 768w, assets/Product-Clay/farm-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="FARM CELLS"></div>
+        <div class="hero-vert-item" data-i="5"><img src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w, assets/Product-Clay/oshun-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="OSHUN"></div>
       </div>
+    </div>
+    <div class="hero-vert-meta" id="heroVertMeta">
+      <div class="hero-vert-combined hero-vert-title-row"><span class="hero-vert-category" id="heroVertCategory">URBAN MOBILITY</span><span class="hero-vert-pipe">|</span><span class="hero-vert-name" id="heroVertName">ORCA</span></div>
+      <div class="hero-vert-sub hero-vert-title-row" id="heroVertSub">Our Developments</div>
+      <button class="hero-vert-consult" id="heroVertConsult">Consult</button>
     </div>
   </div>
   <!-- Notch arrow at blob's left edge -->
@@ -3096,7 +3041,7 @@ footer {
       <!-- SLIDE 01: ORCA -->
       <div class="slider-slide" data-index="0">
         <div class="slide-main">
-          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/orca-1400.webp" srcset="assets/Product-Images/orca-800.webp 800w, assets/Product-Images/orca-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="ORCA">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/orca-1400.webp" srcset="assets/Product-Images/orca-800.webp 800w, assets/Product-Images/orca-1400.webp 1400w, assets/Product-Images/orca-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="ORCA">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar Harvesting Glass Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Electric Propulsion</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3105,7 +3050,7 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/orca-clay-768.webp" srcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="ORCA clay model">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/orca-clay-768.webp" srcset="assets/Product-Clay/orca-clay-400.webp 400w, assets/Product-Clay/orca-clay-768.webp 768w, assets/Product-Clay/orca-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="ORCA clay model">
             <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/orca-iso-768.webp" width="768" height="768" alt="ORCA isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
@@ -3147,7 +3092,7 @@ footer {
       <!-- SLIDE 02: AQUA PODS -->
       <div class="slider-slide" data-index="1">
         <div class="slide-main">
-          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/aquapod-1400.webp" srcset="assets/Product-Images/aquapod-800.webp 800w, assets/Product-Images/aquapod-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Aqua Pods">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/aquapod-1400.webp" srcset="assets/Product-Images/aquapod-800.webp 800w, assets/Product-Images/aquapod-1400.webp 1400w, assets/Product-Images/aquapod-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Aqua Pods">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Self Contained Systems</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Mobile Entertainment Venue</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3156,7 +3101,7 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay-768.webp" srcset="assets/Product-Clay/aquapod-clay-400.webp 400w, assets/Product-Clay/aquapod-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Aqua Pods clay model">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay-768.webp" srcset="assets/Product-Clay/aquapod-clay-400.webp 400w, assets/Product-Clay/aquapod-clay-768.webp 768w, assets/Product-Clay/aquapod-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Aqua Pods clay model">
             <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/aquapod-iso-768.webp" width="768" height="768" alt="Aqua Pods isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
@@ -3197,7 +3142,7 @@ footer {
       <!-- SLIDE 03: FLOATING CABANAS -->
       <div class="slider-slide" data-index="2">
         <div class="slide-main">
-          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/cabana-1400.webp" srcset="assets/Product-Images/cabana-800.webp 800w, assets/Product-Images/cabana-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Cabanas">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/cabana-1400.webp" srcset="assets/Product-Images/cabana-800.webp 800w, assets/Product-Images/cabana-1400.webp 1400w, assets/Product-Images/cabana-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Cabanas">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Organic Biomorphic Form</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">High Buoyancy EPS Core</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3206,7 +3151,7 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay-768.webp" srcset="assets/Product-Clay/cabana-clay-400.webp 400w, assets/Product-Clay/cabana-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Cabana clay model">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay-768.webp" srcset="assets/Product-Clay/cabana-clay-400.webp 400w, assets/Product-Clay/cabana-clay-768.webp 768w, assets/Product-Clay/cabana-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Cabana clay model">
             <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/cabana-iso-768.webp" width="768" height="768" alt="Cabana isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
@@ -3249,7 +3194,7 @@ footer {
       <!-- SLIDE 04: MANTARAY -->
       <div class="slider-slide" data-index="3">
         <div class="slide-main">
-          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/mantaray-1400.webp" srcset="assets/Product-Images/mantaray-800.webp 800w, assets/Product-Images/mantaray-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Mantaray">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/mantaray-1400.webp" srcset="assets/Product-Images/mantaray-800.webp 800w, assets/Product-Images/mantaray-1400.webp 1400w, assets/Product-Images/mantaray-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Mantaray">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar Harvesting Roof Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Recyclable HDPE Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3258,7 +3203,7 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/mantaray-clay-768.webp" srcset="assets/Product-Clay/mantaray-clay-400.webp 400w, assets/Product-Clay/mantaray-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Mantaray clay model">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/mantaray-clay-768.webp" srcset="assets/Product-Clay/mantaray-clay-400.webp 400w, assets/Product-Clay/mantaray-clay-768.webp 768w, assets/Product-Clay/mantaray-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Mantaray clay model">
             <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/mantaray-iso-768.webp" width="768" height="768" alt="Mantaray isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
@@ -3299,7 +3244,7 @@ footer {
       <!-- SLIDE 05: FLOATING FARM CELLS -->
       <div class="slider-slide" data-index="4">
         <div class="slide-main">
-          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/ffc-1400.webp" srcset="assets/Product-Images/ffc-800.webp 800w, assets/Product-Images/ffc-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Farm Cells">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/ffc-1400.webp" srcset="assets/Product-Images/ffc-800.webp 800w, assets/Product-Images/ffc-1400.webp 1400w, assets/Product-Images/ffc-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Farm Cells">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Hydroponic Arrays</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Modular Grid Expansion</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3308,7 +3253,7 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay-768.webp" srcset="assets/Product-Clay/farm-clay-400.webp 400w, assets/Product-Clay/farm-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="FFC clay model">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay-768.webp" srcset="assets/Product-Clay/farm-clay-400.webp 400w, assets/Product-Clay/farm-clay-768.webp 768w, assets/Product-Clay/farm-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="FFC clay model">
             <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/fcc-iso-768.webp" width="768" height="768" alt="FFC isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
@@ -3350,7 +3295,7 @@ footer {
       <!-- SLIDE 06: OSHUN -->
       <div class="slider-slide" data-index="5">
         <div class="slide-main">
-          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/oshun-1400.webp" srcset="assets/Product-Images/oshun-800.webp 800w, assets/Product-Images/oshun-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Oshun">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/oshun-1400.webp" srcset="assets/Product-Images/oshun-800.webp 800w, assets/Product-Images/oshun-1400.webp 1400w, assets/Product-Images/oshun-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Oshun">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Modular Floating Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Garden Terraces & Planting</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3359,7 +3304,7 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Oshun clay model">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/oshun-clay-768.webp" srcset="assets/Product-Clay/oshun-clay-400.webp 400w, assets/Product-Clay/oshun-clay-768.webp 768w, assets/Product-Clay/oshun-clay-1024.webp 1024w" sizes="(max-width: 1024px) 42vw, 400px" width="768" height="768" alt="Oshun clay model">
             <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/ohsun-iso-768.webp" width="768" height="768" alt="Oshun isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
@@ -3447,7 +3392,7 @@ footer {
         <h2 class="pm-name">ORCA</h2>
       </header>
       <div class="pm-mid">
-        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/orca-1400.webp" srcset="assets/Product-Images/orca-800.webp 800w, assets/Product-Images/orca-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Orca"></div>
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/orca-1400.webp" srcset="assets/Product-Images/orca-800.webp 800w, assets/Product-Images/orca-1400.webp 1400w, assets/Product-Images/orca-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Orca"></div>
         <div class="pm-stats">
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">18</span><span class="pm-stat-unit">m</span></div><span class="pm-stat-label">Length</span></div>
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">24</span></div><span class="pm-stat-label">Passengers</span></div>
@@ -3466,7 +3411,7 @@ footer {
         <h2 class="pm-name">AQUA PODS</h2>
       </header>
       <div class="pm-mid">
-        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/aquapod-1400.webp" srcset="assets/Product-Images/aquapod-800.webp 800w, assets/Product-Images/aquapod-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Aqua Pods"></div>
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/aquapod-1400.webp" srcset="assets/Product-Images/aquapod-800.webp 800w, assets/Product-Images/aquapod-1400.webp 1400w, assets/Product-Images/aquapod-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Aqua Pods"></div>
         <div class="pm-stats">
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">15</span><span class="pm-stat-unit">m</span></div><span class="pm-stat-label">Diameter</span></div>
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">40</span></div><span class="pm-stat-label">Guests</span></div>
@@ -3485,7 +3430,7 @@ footer {
         <h2 class="pm-name">FLOATING CABANAS</h2>
       </header>
       <div class="pm-mid">
-        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/cabana-1400.webp" srcset="assets/Product-Images/cabana-800.webp 800w, assets/Product-Images/cabana-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Cabanas"></div>
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/cabana-1400.webp" srcset="assets/Product-Images/cabana-800.webp 800w, assets/Product-Images/cabana-1400.webp 1400w, assets/Product-Images/cabana-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Cabanas"></div>
         <div class="pm-stats">
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">85</span><span class="pm-stat-unit">m²</span></div><span class="pm-stat-label">Floor Area</span></div>
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">6</span></div><span class="pm-stat-label">Guests</span></div>
@@ -3504,7 +3449,7 @@ footer {
         <h2 class="pm-name">MANTARAY</h2>
       </header>
       <div class="pm-mid">
-        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/mantaray-1400.webp" srcset="assets/Product-Images/mantaray-800.webp 800w, assets/Product-Images/mantaray-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Mantaray"></div>
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/mantaray-1400.webp" srcset="assets/Product-Images/mantaray-800.webp 800w, assets/Product-Images/mantaray-1400.webp 1400w, assets/Product-Images/mantaray-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Mantaray"></div>
         <div class="pm-stats">
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">22</span><span class="pm-stat-unit">m</span></div><span class="pm-stat-label">Length</span></div>
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">12</span></div><span class="pm-stat-label">Passengers</span></div>
@@ -3523,7 +3468,7 @@ footer {
         <h2 class="pm-name">FLOATING FARM CELLS</h2>
       </header>
       <div class="pm-mid">
-        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/ffc-1400.webp" srcset="assets/Product-Images/ffc-800.webp 800w, assets/Product-Images/ffc-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Farm Cells"></div>
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/ffc-1400.webp" srcset="assets/Product-Images/ffc-800.webp 800w, assets/Product-Images/ffc-1400.webp 1400w, assets/Product-Images/ffc-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Floating Farm Cells"></div>
         <div class="pm-stats">
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">200</span><span class="pm-stat-unit">m²</span></div><span class="pm-stat-label">Cell Area</span></div>
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">500</span><span class="pm-stat-unit">kg</span></div><span class="pm-stat-label">Monthly Yield</span></div>
@@ -3542,7 +3487,7 @@ footer {
         <h2 class="pm-name">OSHUN</h2>
       </header>
       <div class="pm-mid">
-        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/oshun-1400.webp" srcset="assets/Product-Images/oshun-800.webp 800w, assets/Product-Images/oshun-1400.webp 1400w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Oshun"></div>
+        <div class="pm-image"><img loading="lazy" decoding="async" src="assets/Product-Images/oshun-1400.webp" srcset="assets/Product-Images/oshun-800.webp 800w, assets/Product-Images/oshun-1400.webp 1400w, assets/Product-Images/oshun-1920.webp 1920w" sizes="(max-width: 1024px) 92vw, 46vw" width="1400" height="782" alt="Oshun"></div>
         <div class="pm-stats">
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">2</span></div><span class="pm-stat-label">Design Stage</span></div>
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">3</span></div><span class="pm-stat-label">Deck Levels</span></div>
@@ -3762,7 +3707,7 @@ footer {
 <!-- FOOTER -->
 <footer>
   <div>
-    <img loading="lazy" decoding="async" src="assets/Logos/logo-704.webp" width="704" height="448" alt="AA" class="footer-logo">
+    <img loading="lazy" decoding="async" src="assets/Logos/logo-192.webp" width="192" height="122" alt="AA" class="footer-logo">
     <p class="footer-tagline">Since 2017, redefining life on water from the UAE to the world.</p>
   </div>
   <div>
@@ -4424,7 +4369,7 @@ if (_rippleOK) {
   const CATEGORIES = ['URBAN MOBILITY', 'RETAIL, AMBULATORY & FUELING', 'FLOATING SUITES & RESIDENCES', 'FLOATING SUITES & RESIDENCES', 'AGRICULTURE / FOOD SECURITY', 'ENTERTAINMENT'];
   const SUBTITLES  = ['Our Developments', 'Our Developments', 'Design and Consultancy', 'Design and Consultancy', 'Our Developments', 'Design and Consultancy'];
   const ITEM_H  = 380;
-  const GAP     = 160;   // must match .hero-vert-track gap in CSS
+  const GAP     = 24;   // must match .hero-vert-track gap in CSS
   const STEP    = ITEM_H + GAP;
   const N       = 6;
 
@@ -4469,7 +4414,10 @@ if (_rippleOK) {
     });
 
     const nearIdx = Math.round(Math.max(0, Math.min(N - 1, clamped)));
-    lastNearIdx = nearIdx;   // labels are per-product now; no shared meta to swap
+    if (nearIdx !== lastNearIdx) {
+      lastNearIdx = nearIdx;
+      animateMeta(nearIdx);
+    }
 
     // Show Explore Projects button only when Oshun (last item) is active
     if (exploreBtn) exploreBtn.classList.toggle('visible', nearIdx === N - 1);
