@@ -32,6 +32,26 @@ body {
   overflow-x: hidden;
 }
 
+/* Keyboard focus indicator — mouse clicks stay clean via :focus-visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+a, button, [role="button"], [tabindex] { outline-color: var(--accent); }
+
+/* Respect users who prefer less motion — calm the heavy animations/scroll-jack */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  #waterOverlay { display: none; }
+}
+
 
 
 /* ─── INTRO ANIMATION ─── */
@@ -297,9 +317,13 @@ nav {
   z-index: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 6px;
   cursor: pointer;
-  padding: 8px;
+  padding: 11px;
+  min-width: 44px;
+  min-height: 44px;
 }
 .nav-hamburger span {
   display: block;
@@ -1573,7 +1597,6 @@ nav {
   background: #0c1a1c;
   display: block;
 }
-.statement-video-m { display: none; }
 
 
 
@@ -2303,8 +2326,8 @@ footer {
     top: 100px;                /* vertical centre of the 200px clay row */
     transform: translateY(-50%);
     z-index: 9100;
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2377,16 +2400,19 @@ footer {
     margin-top: 16px;
   }
   .hero-m-dot {
+    box-sizing: content-box;      /* keep visual dot 6px, grow the tap area via padding */
     width: 6px;
     height: 6px;
+    padding: 11px 8px;
+    background-clip: content-box;
     border-radius: 50%;
-    background: rgba(255,255,255,0.28);
-    transition: width 0.3s ease, background 0.3s ease;
+    background-color: rgba(255,255,255,0.28);
+    transition: width 0.3s ease, background-color 0.3s ease;
   }
   .hero-m-dot.is-active {
     width: 20px;
     border-radius: 3px;
-    background: #fff;
+    background-color: #fff;
   }
 
   /* Water displacement filter needs a mouse and is costly — drop it on the video */
@@ -2435,8 +2461,8 @@ footer {
     top: 18px;
     right: 18px;
     z-index: 9700;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.2);
     background: rgba(10,13,13,0.55);
@@ -2509,8 +2535,8 @@ footer {
     justify-content: space-between;
     gap: 14px;
   }
-  .pm-stat { flex: 1; }
   .pm-stat {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -2622,13 +2648,7 @@ footer {
     border-radius: 6px;
     box-shadow: none;
   }
-  .statement-video-placeholder { display: none; }
-  .statement-video-m {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  .statement-video-placeholder { display: block; }
   .statement-text { font-size: clamp(28px, 8vw, 52px); letter-spacing: -1.5px; }
   .statement-text-lead { font-size: clamp(18px, 5vw, 32px); letter-spacing: -0.5px; }
   .statement-text-foundation { font-size: clamp(46px, 13vw, 88px); line-height: 0.9; }
@@ -2643,15 +2663,45 @@ footer {
   .wwd-active-desc { font-size: 13.5px; line-height: 1.65; max-width: 100%; margin-bottom: 32px; }
   .wwd-item-name { font-size: clamp(17px, 4.6vw, 22px); line-height: 1.25; }
 
-  /* Services */
-  .services-scroll-wrapper { height: 500vh; }
-  .serv-slide { grid-template-columns: 1fr; }
+  /* Services — spatial scroll scene disabled; static background + stacked layout */
+  .services-scroll-wrapper { height: auto; }
+  .services {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .services-bg { transform: none !important; }
+  .services-intro {
+    position: relative;
+    inset: auto;
+    opacity: 1 !important;
+    justify-content: flex-start;
+    padding: 72px 24px 32px;
+  }
+  .services-spatial {
+    position: relative;
+    inset: auto;
+    pointer-events: auto;
+    padding-bottom: 40px;
+  }
+  .serv-slide {
+    position: relative;
+    inset: auto;
+    display: block;
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 28px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .serv-slide-left { padding: 0; transform: none !important; }
   .serv-slide-right { display: none; }
-  .serv-slide-left { padding: 0 24px; }
-  .serv-slide-name { font-size: clamp(28px, 8vw, 52px); margin-bottom: 24px; }
+  .serv-slide-name { font-size: clamp(28px, 8vw, 52px); margin-bottom: 20px; }
   .serv-slide-desc { font-size: 13px; }
-  .services-intro { padding: 48px 24px; }
-  .services-step-ctr { top: 24px; right: 24px; }
+  /* Scroll-only chrome — hidden with the effect */
+  .services-step-ctr,
+  .services-pbar,
+  .services-hint { display: none; }
 
   /* CTA */
   .cta-heading { letter-spacing: -3px; }
@@ -2716,7 +2766,7 @@ footer {
 
   <!-- Slide 1: Logo -->
   <div class="intro-slide active" id="introSlide1">
-    <img id="introLogo" src="assets/Logos/logo.png" alt="Aquatic Architects">
+    <img id="introLogo" src="assets/Logos/logo.webp" alt="Aquatic Architects">
   </div>
 
   <!-- Slide 2: Awards / partner ribbon -->
@@ -2725,21 +2775,21 @@ footer {
     <div class="intro-ribbon-wrap">
       <div class="intro-ribbon" id="introRibbon">
         <!-- set 1 -->
-        <img class="intro-ribbon-logo" src="assets/Logos/Aldar.png" alt="Aldar">
-        <img class="intro-ribbon-logo" src="assets/Logos/bloomberg.png" alt="Bloomberg" style="height:90px;">
-        <img class="intro-ribbon-logo" src="assets/Logos/Eagle_Hills.png" alt="Eagle Hills">
-        <img class="intro-ribbon-logo" src="assets/Logos/Emaar-Properties-Logo-old.png" alt="Emaar" style="filter:grayscale(1) brightness(0.7) contrast(180%) invert(1); mix-blend-mode:screen;">
+        <img class="intro-ribbon-logo" src="assets/Logos/Aldar.webp" alt="Aldar">
+        <img class="intro-ribbon-logo" src="assets/Logos/bloomberg.webp" alt="Bloomberg" style="height:90px;">
+        <img class="intro-ribbon-logo" src="assets/Logos/Eagle_Hills.webp" alt="Eagle Hills">
+        <img class="intro-ribbon-logo" src="assets/Logos/Emaar-Properties-Logo-old.webp" alt="Emaar" style="filter:grayscale(1) brightness(0.7) contrast(180%) invert(1); mix-blend-mode:screen;">
         <img class="intro-ribbon-logo" src="assets/Logos/BIG_oceaya_logo.svg" alt="OCEAYA">
-        <img class="intro-ribbon-logo" src="assets/Logos/the-washington-post-logo-1.png" alt="Washington Post" style="height:110px;">
-        <img class="intro-ribbon-logo" src="assets/Logos/CNN-Logo-1980.png" alt="CNN">
+        <img class="intro-ribbon-logo" src="assets/Logos/the-washington-post-logo-1.webp" alt="Washington Post" style="height:110px;">
+        <img class="intro-ribbon-logo" src="assets/Logos/CNN-Logo-1980.webp" alt="CNN">
         <!-- set 2 (duplicate for seamless loop) -->
-        <img class="intro-ribbon-logo" src="assets/Logos/Aldar.png" alt="Aldar">
-        <img class="intro-ribbon-logo" src="assets/Logos/bloomberg.png" alt="Bloomberg" style="height:90px;">
-        <img class="intro-ribbon-logo" src="assets/Logos/Eagle_Hills.png" alt="Eagle Hills">
-        <img class="intro-ribbon-logo" src="assets/Logos/Emaar-Properties-Logo-old.png" alt="Emaar" style="filter:grayscale(1) brightness(0.7) contrast(180%) invert(1); mix-blend-mode:screen;">
+        <img class="intro-ribbon-logo" src="assets/Logos/Aldar.webp" alt="Aldar">
+        <img class="intro-ribbon-logo" src="assets/Logos/bloomberg.webp" alt="Bloomberg" style="height:90px;">
+        <img class="intro-ribbon-logo" src="assets/Logos/Eagle_Hills.webp" alt="Eagle Hills">
+        <img class="intro-ribbon-logo" src="assets/Logos/Emaar-Properties-Logo-old.webp" alt="Emaar" style="filter:grayscale(1) brightness(0.7) contrast(180%) invert(1); mix-blend-mode:screen;">
         <img class="intro-ribbon-logo" src="assets/Logos/BIG_oceaya_logo.svg" alt="OCEAYA">
-        <img class="intro-ribbon-logo" src="assets/Logos/the-washington-post-logo-1.png" alt="Washington Post" style="height:110px;">
-        <img class="intro-ribbon-logo" src="assets/Logos/CNN-Logo-1980.png" alt="CNN">
+        <img class="intro-ribbon-logo" src="assets/Logos/the-washington-post-logo-1.webp" alt="Washington Post" style="height:110px;">
+        <img class="intro-ribbon-logo" src="assets/Logos/CNN-Logo-1980.webp" alt="CNN">
       </div>
     </div>
   </div>
@@ -2810,7 +2860,7 @@ footer {
 <!-- NAV -->
 <nav>
   <div class="nav-bar"></div>
-  <img src="assets/Logos/logo.png" alt="AA" class="nav-logo">
+  <img src="assets/Logos/logo.webp" alt="AA" class="nav-logo">
   <span class="nav-aa">AA</span>
   <div class="nav-hamburger">
     <span></span><span></span><span></span>
@@ -2840,18 +2890,19 @@ footer {
 </svg>
 <canvas id="sim" style="display:none"></canvas>
 
+<main>
 <!-- HERO -->
 <div class="hero-outer" id="heroOuter">
 <section class="hero" id="hero">
   <div class="hero-content" id="heroContent">
-    <img src="assets/Logos/logo.png" alt="Aquatic Architects" class="hero-logo-main">
+    <img src="assets/Logos/logo.webp" alt="Aquatic Architects" class="hero-logo-main">
     <div class="hero-tagline">
       <p>Since 2017, Aquatic Architects has been redefining life on water from the UAE to the world, across floating architecture, marine design, and master planning for coasts and islands.</p>
     </div>
   </div>
   <div class="hero-bg" style="filter:url('#water')">
     <video autoplay loop muted playsinline preload="metadata" poster="assets/BackGrounds/hero-bg.webp">
-      <source src="assets/BackGrounds/background-loop-opt.mp4" type="video/mp4">
+      <source src="assets/BackGrounds/background-loop-opt.webm" type="video/webm">
     </video>
   </div>
   <div class="hero-overlay"></div>
@@ -2939,7 +2990,7 @@ footer {
       <!-- SLIDE 01: ORCA -->
       <div class="slider-slide" data-index="0">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/Orca 3.webp" alt="ORCA">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/Orca 3.webp" alt="ORCA">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar-Harvesting Glass Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Electric Propulsion</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -2948,8 +2999,8 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/orca-clay.webp" alt="ORCA clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/orca-iso.webp" alt="ORCA isometric">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/orca-clay.webp" alt="ORCA clay model">
+            <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/orca-iso.webp" alt="ORCA isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
@@ -2981,7 +3032,7 @@ footer {
               <span class="slide-tag">Solar-Powered</span>
             </div>
             <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <a class="slide-cta" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
               <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept Design</span></div>
             </div>
           </div>
@@ -2991,7 +3042,7 @@ footer {
       <!-- SLIDE 02: AQUA PODS -->
       <div class="slider-slide" data-index="1">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/AquaPod - Adnoc.webp" alt="Aqua Pods">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/AquaPod - Adnoc.webp" alt="Aqua Pods">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Self-Contained Systems</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Mobile Entertainment Venue</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3000,8 +3051,8 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/aquapod-clay.webp" alt="Aqua Pods clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/aquapod-iso.webp" alt="Aqua Pods isometric">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/aquapod-clay.webp" alt="Aqua Pods clay model">
+            <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/aquapod-iso.webp" alt="Aqua Pods isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
@@ -3031,7 +3082,7 @@ footer {
               <span class="slide-tag">Off-Grid</span>
             </div>
             <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <a class="slide-cta" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
               <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Prototype Development</span></div>
             </div>
           </div>
@@ -3041,7 +3092,7 @@ footer {
       <!-- SLIDE 03: FLOATING CABANAS -->
       <div class="slider-slide" data-index="2">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/cabana.webp" alt="Floating Cabanas">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/cabana.webp" alt="Floating Cabanas">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Organic Biomorphic Form</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">High Buoyancy EPS Core</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3050,8 +3101,8 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/cabana-clay.webp" alt="Cabana clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/cabana-iso.webp" alt="Cabana isometric">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/cabana-clay.webp" alt="Cabana clay model">
+            <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/cabana-iso.webp" alt="Cabana isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
@@ -3083,7 +3134,7 @@ footer {
               <span class="slide-tag">Ramhan Island</span>
             </div>
             <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <a class="slide-cta" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
               <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Ongoing</span></div>
             </div>
           </div>
@@ -3093,7 +3144,7 @@ footer {
       <!-- SLIDE 04: MANTARAY -->
       <div class="slider-slide" data-index="3">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/Mantaray 1.webp" alt="Mantaray">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/Mantaray 1.webp" alt="Mantaray">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Solar-Harvesting Roof Panels</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Recyclable HDPE Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3102,8 +3153,8 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/Mantaray Clay.webp" alt="Mantaray clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/mantaray-iso.webp" alt="Mantaray isometric">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/Mantaray Clay.webp" alt="Mantaray clay model">
+            <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/mantaray-iso.webp" alt="Mantaray isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
@@ -3112,7 +3163,7 @@ footer {
           <div class="slide-panel-text">
             <div class="slide-label">FLOATING SUITES &amp; RESIDENCES</div>
             <h2 class="slide-name">MANTARAY</h2>
-            <p class="slide-desc">A solar-powered electric passenger vessel designed for Abu Dhabi's coastal waters. Mantaray redefines water-taxi transportation with zero fuel consumption, silent electric propulsion, and a recyclable HDPE body, delivering an immersive panoramic travel experience with minimal environmental impact.</p>
+            <p class="slide-desc">MantaRay is an iconic floating villa concept developed for Ramhan Island, designed as a sculptural luxury residence inspired by the fluid movement and graceful anatomy of a manta ray. The project translates the manta ray's soft curvature, wing-like form, and close relationship with water into an architectural language that is seamless, organic, and visually striking.</p>
             <div class="slide-specs">
               <div class="slide-spec">
                 <div class="slide-spec-number"><span class="slide-spec-value" data-target="22">0</span><span class="slide-spec-unit">m</span></div>
@@ -3133,7 +3184,7 @@ footer {
               <span class="slide-tag">Water Taxi</span>
             </div>
             <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <a class="slide-cta" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
               <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept</span></div>
             </div>
           </div>
@@ -3143,7 +3194,7 @@ footer {
       <!-- SLIDE 05: FLOATING FARM CELLS -->
       <div class="slider-slide" data-index="4">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/ffc.webp" alt="Floating Farm Cells">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/ffc.webp" alt="Floating Farm Cells">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Hydroponic Arrays</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Modular Grid Expansion</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3152,8 +3203,8 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/farm-clay.webp" alt="FFC clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/fcc-iso.webp" alt="FFC isometric">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/farm-clay.webp" alt="FFC clay model">
+            <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/fcc-iso.webp" alt="FFC isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
@@ -3185,7 +3236,7 @@ footer {
               <span class="slide-tag">Scalable Grid</span>
             </div>
             <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <a class="slide-cta" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
               <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Research & Development</span></div>
             </div>
           </div>
@@ -3195,7 +3246,7 @@ footer {
       <!-- SLIDE 06: OSHUN -->
       <div class="slider-slide" data-index="5">
         <div class="slide-main">
-          <img class="slide-main-img" src="assets/Product-Images/Oshun 1 .webp" alt="Oshun">
+          <img class="slide-main-img" loading="lazy" decoding="async" src="assets/Product-Images/Oshun 1 .webp" alt="Oshun">
           <div class="slide-callouts">
             <div class="slide-callout" style="top:28%"><span class="slide-callout-label">Modular Floating Hull</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
             <div class="slide-callout" style="top:50%"><span class="slide-callout-label">Garden Terraces & Planting</span><div class="slide-callout-line"></div><div class="slide-callout-dot"></div></div>
@@ -3204,8 +3255,8 @@ footer {
         </div>
         <div class="slide-panel">
           <div class="slide-panel-model" data-model="clay">
-            <img class="slide-model-img model-clay" src="assets/Product-Clay/Oshun Clay 2.webp" alt="Oshun clay model">
-            <img class="slide-model-img model-iso"  src="assets/Product-iso/ohsun-iso.webp" alt="Oshun isometric">
+            <img class="slide-model-img model-clay" loading="lazy" decoding="async" src="assets/Product-Clay/Oshun Clay 2.webp" alt="Oshun clay model">
+            <img class="slide-model-img model-iso"  loading="lazy" decoding="async" src="assets/Product-iso/ohsun-iso.webp" alt="Oshun isometric">
             <div class="slide-model-toggle">
               <span class="slide-model-toggle-btn model-toggle-clay">Clay</span>
               <span class="slide-model-toggle-btn model-toggle-iso">Iso</span>
@@ -3237,7 +3288,7 @@ footer {
               <span class="slide-tag">Sacred Design</span>
             </div>
             <div class="slide-footer">
-              <a class="slide-cta"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
+              <a class="slide-cta" href="https://www.aa-ds.com/projects" target="_blank" rel="noopener"><span class="slide-cta-text">Explore product</span><span class="slide-cta-arrow"></span></a>
               <div class="slide-status"><span class="slide-status-dot"></span><span class="slide-status-text">Concept Design</span></div>
             </div>
           </div>
@@ -3357,7 +3408,7 @@ footer {
           <div class="pm-stat"><div class="pm-stat-num"><span class="pm-stat-value">28</span><span class="pm-stat-unit">kn</span></div><span class="pm-stat-label">Max Speed</span></div>
         </div>
       </div>
-      <p class="pm-desc">A solar-powered electric passenger vessel for Abu Dhabi's coastal waters — zero fuel, silent electric propulsion, and a recyclable HDPE body with panoramic views.</p>
+      <p class="pm-desc">An iconic floating villa concept for Ramhan Island — a sculptural luxury residence inspired by the manta ray's fluid movement, wing-like form, and close relationship with water.</p>
       <div class="pm-tags"><span class="pm-tag">Solar-Powered</span><span class="pm-tag">Electric Drive</span><span class="pm-tag">Water Taxi</span></div>
     </div>
   </div>
@@ -3409,7 +3460,7 @@ footer {
 
 <!-- STATEMENT TAGLINE -->
 <section class="statement-tagline" id="statementTagline">
-  <img class="statement-tagline-bg" src="assets/BackGrounds/sharp BG.webp" alt="">
+  <img class="statement-tagline-bg" loading="lazy" decoding="async" src="assets/BackGrounds/sharp BG.webp" alt="">
   <div class="statement-tagline-inner">
     <div class="statement-text statement-text-lead">WHERE WATER IS THE</div>
     <div class="statement-text statement-text-foundation"><span style="font-weight:500">F</span>OUNDATION</div>
@@ -3497,12 +3548,8 @@ footer {
   </div>
 
   <div class="statement-video-wrap">
-    <!-- VIDEO PLACEHOLDER: replace src with hosted video URL when available -->
+    <!-- VIDEO PLACEHOLDER: add the acclimation video source here when available -->
     <div class="statement-video-placeholder"></div>
-    <!-- Mobile-only: real 16:9 playing video -->
-    <video class="statement-video-m" autoplay loop muted playsinline preload="metadata">
-      <source src="assets/Acclimation/2-opt.mp4" type="video/mp4">
-    </video>
   </div>
 
 </section>
@@ -3527,7 +3574,7 @@ footer {
           <div class="serv-slide-label">01 STRATEGIC &amp; TECHNICAL ADVISORY</div>
           <div class="serv-slide-name">Strategic &amp; Technical Advisory</div>
           <div class="serv-slide-desc">Strategic advisory for marine and floating projects, supporting feasibility, regulatory alignment, engineering strategy, and long-term viability.</div>
-          <a class="serv-contact-btn">
+          <a class="serv-contact-btn" href="https://www.aa-ds.com/contact" target="_blank" rel="noopener">
             <span class="serv-contact-btn-text">Get Started</span>
             <span class="serv-contact-btn-arrow"></span>
           </a>
@@ -3538,7 +3585,7 @@ footer {
           <div class="serv-slide-label">02 DESIGN</div>
           <div class="serv-slide-name">Design</div>
           <div class="serv-slide-desc">End-to-end marine architecture and master-planning, integrating environmental systems, adaptive design, and operational performance.</div>
-          <a class="serv-contact-btn">
+          <a class="serv-contact-btn" href="https://www.aa-ds.com/contact" target="_blank" rel="noopener">
             <span class="serv-contact-btn-text">Get Started</span>
             <span class="serv-contact-btn-arrow"></span>
           </a>
@@ -3549,7 +3596,7 @@ footer {
           <div class="serv-slide-label">03 IP DEVELOPMENT</div>
           <div class="serv-slide-name">IP Development</div>
           <div class="serv-slide-desc">Co-creating, funding, and delivering transformative marine projects from concept through real-world deployment.</div>
-          <a class="serv-contact-btn">
+          <a class="serv-contact-btn" href="https://www.aa-ds.com/contact" target="_blank" rel="noopener">
             <span class="serv-contact-btn-text">Get Started</span>
             <span class="serv-contact-btn-arrow"></span>
           </a>
@@ -3560,7 +3607,7 @@ footer {
           <div class="serv-slide-label">04 PARTNERSHIP &amp; DEVELOPMENT</div>
           <div class="serv-slide-name">Partnership &amp; Development</div>
           <div class="serv-slide-desc">Development of proprietary modular systems, materials, and adaptive design IP in collaboration with governments, developers, and institutions.</div>
-          <a class="serv-contact-btn">
+          <a class="serv-contact-btn" href="https://www.aa-ds.com/contact" target="_blank" rel="noopener">
             <span class="serv-contact-btn-text">Get Started</span>
             <span class="serv-contact-btn-arrow"></span>
           </a>
@@ -3592,14 +3639,15 @@ footer {
   <div class="cta-bg"></div>
   <div class="cta-content">
     <h2 class="cta-heading" style="font-family: Montserrat">Share your<br>vision</h2>
-    <a class="cta-btn">Get in touch</a>
+    <a class="cta-btn" href="https://www.aa-ds.com/contact" target="_blank" rel="noopener">Get in touch</a>
   </div>
 </section>
+</main>
 
 <!-- FOOTER -->
 <footer>
   <div>
-    <img src="assets/Logos/logo.png" alt="AA" class="footer-logo">
+    <img loading="lazy" decoding="async" src="assets/Logos/logo.webp" alt="AA" class="footer-logo">
     <p class="footer-tagline">Since 2017, redefining life on water from the UAE to the world.</p>
   </div>
   <div>
@@ -3617,11 +3665,11 @@ footer {
     <div class="footer-links">
       <a class="footer-link" href="mailto:info@aa-ds.com">info@aa-ds.com</a>
       <a class="footer-link" href="tel:+97143881128">+971 4 388 1128</a>
-      <a class="footer-link">Dubai, The 7 By Aurora, Office 5, UAE</a>
+      <span class="footer-link footer-address">Dubai, The 7 By Aurora, Office 5, UAE</span>
     </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">© 2025 Aquatic Architects. All rights reserved.</span>
+    <span class="footer-copy">© 2026 Aquatic Architects. All rights reserved.</span>
     <div style="display:flex;gap:24px;align-items:center;">
       <a class="footer-link" style="font-size:12px;">Terms</a>
       <a class="footer-link" style="font-size:12px;">Privacy</a>
@@ -3919,84 +3967,98 @@ const DAMP   = 0.982;
 const RADIUS = 120;
 
 const simCanvas = document.getElementById('sim');
-simCanvas.style.display = 'none';
-simCanvas.width  = SIM_W;
-simCanvas.height = SIM_H;
-const simCtx = simCanvas.getContext('2d');
-const simImg = simCtx.createImageData(SIM_W, SIM_H);
+const feImg     = document.getElementById('dispMap');
+// Only run the (expensive) ripple sim on devices with a fine pointer that can
+// actually hover it. Touch/coarse-pointer + reduced-motion devices skip it
+// entirely — saves a per-frame full simulation + toDataURL() encode.
+const _rippleOK = simCanvas && feImg &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-let buf1 = new Float32Array(SIM_W * SIM_H);
-let buf2 = new Float32Array(SIM_W * SIM_H);
-const feImg = document.getElementById('dispMap');
+if (_rippleOK) {
+  simCanvas.style.display = 'none';
+  simCanvas.width  = SIM_W;
+  simCanvas.height = SIM_H;
+  const simCtx = simCanvas.getContext('2d');
+  const simImg = simCtx.createImageData(SIM_W, SIM_H);
 
-(function () {
-  const d = simImg.data;
-  for (let i = 0; i < d.length; i += 4) {
-    d[i] = d[i+1] = d[i+2] = 128; d[i+3] = 255;
-  }
-  simCtx.putImageData(simImg, 0, 0);
-  feImg.setAttributeNS(null, 'href', simCanvas.toDataURL());
-})();
+  let buf1 = new Float32Array(SIM_W * SIM_H);
+  let buf2 = new Float32Array(SIM_W * SIM_H);
 
-let lastX = 0, lastY = 0;
-let mouseSimX = SIM_W / 2;
-let mouseSimY = SIM_H / 2;
-
-window.addEventListener('mousemove', (e) => {
-  const dx = e.clientX - lastX;
-  const dy = e.clientY - lastY;
-  const speed = Math.sqrt(dx*dx + dy*dy);
-  lastX = e.clientX; lastY = e.clientY;
-  mouseSimX = (e.clientX / window.innerWidth)  * SIM_W;
-  mouseSimY = (e.clientY / window.innerHeight) * SIM_H;
-  if (speed < 0.8) return;
-  const sx = Math.round(mouseSimX);
-  const sy = Math.round(mouseSimY);
-  const strength = Math.min(speed * 12, 120);
-  const r = 3;
-  for (let py = -r; py <= r; py++) {
-    for (let px = -r; px <= r; px++) {
-      const nx = sx+px, ny = sy+py;
-      if (nx<1||nx>=SIM_W-1||ny<1||ny>=SIM_H-1) continue;
-      const dist = Math.sqrt(px*px+py*py);
-      if (dist <= r) buf1[ny*SIM_W+nx] += strength*(1-dist/r);
+  (function () {
+    const d = simImg.data;
+    for (let i = 0; i < d.length; i += 4) {
+      d[i] = d[i+1] = d[i+2] = 128; d[i+3] = 255;
     }
-  }
-});
+    simCtx.putImageData(simImg, 0, 0);
+    feImg.setAttributeNS(null, 'href', simCanvas.toDataURL());
+  })();
 
-function clamp(v) { return v<0?0:v>255?255:v|0; }
+  let lastX = 0, lastY = 0;
+  let mouseSimX = SIM_W / 2;
+  let mouseSimY = SIM_H / 2;
+  let energy  = 0;      // approximate wave energy — loop sleeps when it decays to ~0
+  let running = false;
 
-function tickRipple() {
-  for (let y=1; y<SIM_H-1; y++) {
-    for (let x=1; x<SIM_W-1; x++) {
-      const i = y*SIM_W+x;
-      buf2[i] = (buf1[i-1]+buf1[i+1]+buf1[i-SIM_W]+buf1[i+SIM_W])/2 - buf2[i];
-      buf2[i] *= DAMP;
+  function clamp(v) { return v<0?0:v>255?255:v|0; }
+
+  window.addEventListener('mousemove', (e) => {
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    const speed = Math.sqrt(dx*dx + dy*dy);
+    lastX = e.clientX; lastY = e.clientY;
+    mouseSimX = (e.clientX / window.innerWidth)  * SIM_W;
+    mouseSimY = (e.clientY / window.innerHeight) * SIM_H;
+    if (speed < 0.8) return;
+    const sx = Math.round(mouseSimX);
+    const sy = Math.round(mouseSimY);
+    const strength = Math.min(speed * 12, 120);
+    const r = 3;
+    for (let py = -r; py <= r; py++) {
+      for (let px = -r; px <= r; px++) {
+        const nx = sx+px, ny = sy+py;
+        if (nx<1||nx>=SIM_W-1||ny<1||ny>=SIM_H-1) continue;
+        const dist = Math.sqrt(px*px+py*py);
+        if (dist <= r) buf1[ny*SIM_W+nx] += strength*(1-dist/r);
+      }
     }
-  }
-  const tmp=buf1; buf1=buf2; buf2=tmp;
-  const d = simImg.data;
-  for (let y=1; y<SIM_H-1; y++) {
-    for (let x=1; x<SIM_W-1; x++) {
-      const i   = y*SIM_W+x;
-      const gx  = buf1[i+1]     - buf1[i-1];
-      const gy  = buf1[i+SIM_W] - buf1[i-SIM_W];
-      const cdx = x - mouseSimX;
-      const cdy = y - mouseSimY;
-      const mask    = Math.max(0, 1-Math.sqrt(cdx*cdx+cdy*cdy)/RADIUS);
-      const falloff = mask*mask;
-      const pi  = i*4;
-      d[pi]   = clamp(128+gx*0.5*falloff);
-      d[pi+1] = clamp(128+gy*0.5*falloff);
-      d[pi+2] = 128;
-      d[pi+3] = 255;
+    energy += strength;
+    if (!running) { running = true; requestAnimationFrame(tickRipple); }
+  }, { passive: true });
+
+  function tickRipple() {
+    for (let y=1; y<SIM_H-1; y++) {
+      for (let x=1; x<SIM_W-1; x++) {
+        const i = y*SIM_W+x;
+        buf2[i] = (buf1[i-1]+buf1[i+1]+buf1[i-SIM_W]+buf1[i+SIM_W])/2 - buf2[i];
+        buf2[i] *= DAMP;
+      }
     }
+    const tmp=buf1; buf1=buf2; buf2=tmp;
+    const d = simImg.data;
+    for (let y=1; y<SIM_H-1; y++) {
+      for (let x=1; x<SIM_W-1; x++) {
+        const i   = y*SIM_W+x;
+        const gx  = buf1[i+1]     - buf1[i-1];
+        const gy  = buf1[i+SIM_W] - buf1[i-SIM_W];
+        const cdx = x - mouseSimX;
+        const cdy = y - mouseSimY;
+        const mask    = Math.max(0, 1-Math.sqrt(cdx*cdx+cdy*cdy)/RADIUS);
+        const falloff = mask*mask;
+        const pi  = i*4;
+        d[pi]   = clamp(128+gx*0.5*falloff);
+        d[pi+1] = clamp(128+gy*0.5*falloff);
+        d[pi+2] = 128;
+        d[pi+3] = 255;
+      }
+    }
+    simCtx.putImageData(simImg, 0, 0);
+    feImg.setAttributeNS(null, 'href', simCanvas.toDataURL());
+    energy *= DAMP;
+    if (energy < 0.5) { running = false; return; }  // quiescent → stop until next move
+    requestAnimationFrame(tickRipple);
   }
-  simCtx.putImageData(simImg, 0, 0);
-  feImg.setAttributeNS(null, 'href', simCanvas.toDataURL());
-  requestAnimationFrame(tickRipple);
 }
-tickRipple();
 
 
 
@@ -4073,7 +4135,7 @@ tickRipple();
   setTimeout(() => {
     showSlide(2);
     document.querySelectorAll('.intro-stat-val').forEach(el => {
-      const target   = +el.dataset.target;
+      const target   = +el.dataset.target || 0;
       const duration = +(el.dataset.duration || 2000);
       const start    = performance.now();
       function tick(now) {
@@ -4114,6 +4176,10 @@ tickRipple();
   const stepCtr  = document.getElementById('servicesStepCtr');
   const hint     = document.getElementById('servicesHint');
   if (!wrapper || !bg) return;
+
+  // Mobile/tablet: skip the scroll-driven spatial scene — CSS renders a
+  // static background with the services stacked normally.
+  if (window.matchMedia('(max-width: 1024px)').matches) return;
 
   // Background zoom keyframes: [scale, originX%, originY%]
   // KF0 = intro wide, KF1-4 = per service zoomed
@@ -4456,11 +4522,17 @@ tickRipple();
 
 // ─── Nav on scroll
 const nav = document.querySelector('nav');
-window.addEventListener('scroll', () => {
-  nav.style.background = window.scrollY > 60
-    ? 'linear-gradient(rgba(12,15,15,0.95), transparent)'
-    : 'transparent';
-});
+if (nav) {
+  let navScrolled = null;   // only write style when the boolean state flips
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY > 60;
+    if (scrolled === navScrolled) return;
+    navScrolled = scrolled;
+    nav.style.background = scrolled
+      ? 'linear-gradient(rgba(12,15,15,0.95), transparent)'
+      : 'transparent';
+  }, { passive: true });
+}
 
 
 // ─── Statement: video expands from bottom-right to fullscreen on scroll
@@ -4654,6 +4726,10 @@ window.addEventListener('scroll', () => {
   const dots = items.map((_, i) => {
     const d = document.createElement('span');
     d.className = 'hero-m-dot';
+    d.setAttribute('role', 'button');
+    d.setAttribute('tabindex', '0');
+    d.setAttribute('aria-label', 'Go to item ' + (i + 1));
+    d.setAttribute('data-kbd-btn', '');
     d.addEventListener('click', () => scrollToItem(i));
     dotsWrap.appendChild(d);
     return d;
@@ -4791,6 +4867,34 @@ window.addEventListener('scroll', () => {
   });
 
   setActive(0);
+})();
+
+// ─── Keyboard accessibility for div/span elements that behave as buttons
+// (dots, carousel items, industry rows). Makes them focusable and lets
+// Enter/Space trigger their existing click handlers.
+(function () {
+  const SELECTORS = [
+    '.slider-dot', '.wwd-progress-dot', '.wwd-progress-track',
+    '.wwd-item', '.hero-vert-item', '.hero-m-item', '.slide-panel-model'
+  ];
+  document.querySelectorAll(SELECTORS.join(',')).forEach(el => {
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('data-kbd-btn', '');
+    if (!el.getAttribute('aria-label')) {
+      const n = el.dataset.name || el.querySelector('.wwd-item-name')?.textContent;
+      const i = el.dataset.i ?? el.dataset.idx;
+      el.setAttribute('aria-label', n ? n.trim() : (i != null ? 'Go to item ' + (+i + 1) : 'Select'));
+    }
+  });
+  // Delegated Enter/Space activation for any element opted in above.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+    const target = e.target.closest('[data-kbd-btn]');
+    if (!target) return;
+    e.preventDefault();
+    target.click();
+  });
 })();
 
 </script>
