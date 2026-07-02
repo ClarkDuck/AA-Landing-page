@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AA | Aquatic Architects</title>
+<link rel="icon" type="image/png" href="assets/Logos/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts loaded async so they don't block first paint (display=swap shows fallback immediately) -->
@@ -387,19 +388,17 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 28px;
+  gap: 20px;                 /* fixed logo↔paragraph distance (same at every breakpoint) */
   text-align: left;
   pointer-events: none;
   transition: opacity 0.5s ease;
 }
 .hero-content.hero-content-interactive { pointer-events: auto; }
 .hero-logo-main {
-  width: 480px;
+  width: 420px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 32px rgba(4,202,130,0.10));
-  margin-left: -130px;
-  margin-top: -60px;
   opacity: 0;
   transform: translateX(60px);
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -410,7 +409,6 @@ nav {
 }
 .hero-tagline {
   max-width: 480px;
-  margin-left: -40px;
   opacity: 0;
   transform: translateX(60px);
   transition: opacity 0.9s ease 0.6s, transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s;
@@ -751,7 +749,7 @@ nav {
   flex: 0 0 100vw;
   height: 100%;
   display: grid;
-  grid-template-columns: 45% 1fr;
+  grid-template-columns: 50% 1fr;
   overflow: hidden;
   transition: grid-template-columns 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
 }
@@ -1185,7 +1183,7 @@ nav {
 .slider-progress {
   position: absolute;
   bottom: 44px;
-  left: 22.5%;                 /* centre of the 45%-wide product image column */
+  left: 25%;                   /* centre of the 50%-wide product image column */
   transform: translateX(-50%);
   z-index: 20;
   pointer-events: none;
@@ -1263,13 +1261,13 @@ nav {
 .wwd-ghost-num {
   position: absolute;
   font-family: 'Oswald', sans-serif;
-  font-size: clamp(160px, 20vw, 240px);
+  font-size: clamp(90px, 11vw, 150px);
   font-weight: 400;
   line-height: 1;
   color: rgba(4,202,130,0.045);
   letter-spacing: -6px;
-  bottom: 60px;
-  right: -20px;
+  bottom: 28px;              /* sit in the band below the progress line */
+  right: 40px;               /* stay inside the panel, clear of the divider */
   user-select: none;
   pointer-events: none;
   transition: opacity 0.5s ease;
@@ -1610,10 +1608,18 @@ nav {
   object-fit: cover;
 }
 /* Acclimation custom video controls — shown on mobile only (see media query) */
-.acc-controls { display: none; }
+.acc-controls { display: none; transition: opacity 0.35s ease; }
+.acc-controls.acc-hidden { opacity: 0; pointer-events: none; }
 .acc-ic-pause { display: none; }
 .acc-controls.is-playing .acc-ic-play  { display: none; }
 .acc-controls.is-playing .acc-ic-pause { display: block; }
+.acc-ic-fs-exit { display: none; }
+.acc-controls.is-fullscreen .acc-ic-fs      { display: none; }
+.acc-controls.is-fullscreen .acc-ic-fs-exit { display: block; }
+/* Fill the screen properly when the video wrapper is fullscreened */
+.statement-video-wrap:fullscreen { width: 100vw; height: 100vh; aspect-ratio: auto; border-radius: 0; }
+.statement-video-wrap:-webkit-full-screen { width: 100vw; height: 100vh; border-radius: 0; }
+.statement-video-wrap:fullscreen .statement-video-placeholder { object-fit: contain; }
 
 
 
@@ -2265,7 +2271,7 @@ footer {
     align-items: center;
     justify-content: flex-start;
     gap: 34px;
-    padding: 13vh 24px 132px;
+    padding: 13vh 28px 132px;
   }
   .hero-content {
     position: static;
@@ -2276,7 +2282,7 @@ footer {
     width: 100%;
     align-items: center;
     text-align: center;
-    gap: 14px;
+    gap: 20px;
   }
   .hero-logo-main {
     width: min(66vw, 260px);
@@ -2429,7 +2435,10 @@ footer {
   }
 
   /* Water displacement filter needs a mouse and is costly — drop it on the video */
-  .hero-bg { filter: none !important; }
+  .hero-bg {
+    filter: none !important;
+    background: #060e0f url('assets/BackGrounds/hero-bg.webp') center / cover no-repeat;
+  }
   .hero-bg video { object-position: center 30%; }
 
   /* Carousel no longer reveals the button, so surface it directly */
@@ -2504,7 +2513,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 80px 24px 52px;
+    padding: 80px 28px 52px;
   }
   .pm-head { display: flex; flex-direction: column; gap: 8px; }
   .pm-label {
@@ -2626,7 +2635,7 @@ footer {
   }
 
   /* Statement tagline */
-  .statement-tagline-inner { padding: 0 24px; }
+  .statement-tagline-inner { padding: 0 28px; }
 
   /* Statement / Acclimation — static 16:9 video, centered, text underneath */
   .statement-outer { height: auto; }
@@ -2637,7 +2646,7 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 22px;
-    padding: 56px 24px;
+    padding: 56px 28px;
   }
   .statement-acclimation-text {
     position: static;
@@ -2705,9 +2714,11 @@ footer {
   .statement-text-foundation { font-size: clamp(46px, 13vw, 88px); line-height: 0.9; }
 
   /* What We Do — already has 900px breakpoint, tighten for mobile */
-  .wwd-left { padding: 48px 24px; min-height: auto; }
-  .wwd-right { padding: 48px 24px; }
+  .wwd-left { padding: 48px 28px; min-height: auto; }
+  .wwd-right { padding: 48px 28px; }
   .wwd-right-header { margin-bottom: 32px; }
+  /* Ghost number to the top-right on mobile/tablet (avoids the crop) */
+  .wwd-ghost-num { top: 16px; right: 20px; bottom: auto; font-size: clamp(64px, 20vw, 120px); }
   .wwd-item { grid-template-columns: 36px 1fr; gap: 12px; padding: 18px 0; }
   /* Longer category names/descriptions (from aa-ds.com) — scale to fit touch widths */
   .wwd-active-name { font-size: clamp(26px, 7vw, 42px); letter-spacing: -1px; margin-bottom: 16px; }
@@ -2722,13 +2733,17 @@ footer {
     min-height: 0;
     overflow: hidden;
   }
-  .services-bg { transform: none !important; }
+  .services-bg {
+    transform: none !important;
+    background: linear-gradient(rgba(3,6,14,0.86) 0%, rgba(3,6,14,0.78) 50%, rgba(3,6,14,0.90) 100%),
+                url('assets/BackGrounds/Services-BG.webp') left center / cover no-repeat;
+  }
   .services-intro {
     position: relative;
     inset: auto;
     opacity: 1 !important;
     justify-content: flex-start;
-    padding: 72px 24px 32px;
+    padding: 72px 28px 32px;
   }
   .services-spatial {
     position: relative;
@@ -2742,7 +2757,7 @@ footer {
     display: block;
     opacity: 1 !important;
     transform: none !important;
-    padding: 28px 24px;
+    padding: 28px 28px;
     border-top: 1px solid rgba(255,255,255,0.08);
   }
   .serv-slide-left { padding: 0; transform: none !important; }
@@ -2756,12 +2771,12 @@ footer {
 
   /* CTA */
   .cta-heading { letter-spacing: -3px; }
-  .cta-content { padding: 0 24px; }
+  .cta-content { padding: 0 28px; }
 
   /* Footer */
   footer {
     grid-template-columns: 1fr;
-    padding: 60px 24px 32px;
+    padding: 60px 28px 32px;
     gap: 40px;
   }
   .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
@@ -2817,7 +2832,7 @@ footer {
 
   <!-- Slide 1: Logo -->
   <div class="intro-slide active" id="introSlide1">
-    <img id="introLogo" src="assets/Logos/logo-960.webp" width="960" height="611" alt="Aquatic Architects">
+    <img id="introLogo" src="assets/Logos/logo-lg.webp" width="960" height="633" alt="Aquatic Architects">
   </div>
 
   <!-- Slide 2: Awards / partner ribbon -->
@@ -2911,7 +2926,7 @@ footer {
 <!-- NAV -->
 <nav>
   <div class="nav-bar"></div>
-  <img src="assets/Logos/logo-192.webp" width="192" height="122" alt="AA" class="nav-logo">
+  <img src="assets/Logos/logo-sm.webp" width="220" height="145" alt="AA" class="nav-logo">
   <span class="nav-aa">AA</span>
   <div class="nav-hamburger">
     <span></span><span></span><span></span>
@@ -2946,7 +2961,7 @@ footer {
 <div class="hero-outer" id="heroOuter">
 <section class="hero" id="hero">
   <div class="hero-content" id="heroContent">
-    <img src="assets/Logos/logo-960.webp" width="960" height="611" alt="Aquatic Architects" class="hero-logo-main">
+    <img src="assets/Logos/logo-lg.webp" width="960" height="633" alt="Aquatic Architects" class="hero-logo-main">
     <div class="hero-tagline">
       <p>Since 2017, Aquatic Architects has been redefining life on water from the UAE to the world, across floating architecture, marine design, and master planning for coasts and islands.</p>
     </div>
@@ -3596,7 +3611,7 @@ footer {
   </div>
 
   <div class="statement-video-wrap">
-    <video class="statement-video-placeholder" id="accVideo" autoplay loop muted playsinline preload="metadata" poster="assets/BackGrounds/AADSBG.webp">
+    <video class="statement-video-placeholder" id="accVideo" autoplay loop muted playsinline preload="metadata" poster="assets/Videos/acclimation-poster.webp">
       <source src="assets/Videos/acclimation01.webm" type="video/webm">
     </video>
     <!-- Mobile-only custom controls (play/pause, seek, replay) -->
@@ -3608,6 +3623,10 @@ footer {
       <input class="acc-seek" id="accSeek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek video">
       <button class="acc-btn" id="accReplayBtn" type="button" aria-label="Replay from start">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+      </button>
+      <button class="acc-btn" id="accFsBtn" type="button" aria-label="Toggle fullscreen">
+        <svg class="acc-ic-fs" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        <svg class="acc-ic-fs-exit" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
       </button>
     </div>
   </div>
@@ -3707,7 +3726,7 @@ footer {
 <!-- FOOTER -->
 <footer>
   <div>
-    <img loading="lazy" decoding="async" src="assets/Logos/logo-192.webp" width="192" height="122" alt="AA" class="footer-logo">
+    <img loading="lazy" decoding="async" src="assets/Logos/logo-sm.webp" width="220" height="145" alt="AA" class="footer-logo">
     <p class="footer-tagline">Since 2017, redefining life on water from the UAE to the world.</p>
   </div>
   <div>
@@ -4142,11 +4161,13 @@ if (_rippleOK) {
   let progRafStart = null;
   let finished = false;
 
+  // Time-based fill only reaches 90%; the last 10% is completed once the page
+  // content has actually finished loading (see load-gating below).
   function tickProgress(ts) {
     if (!progRafStart) progRafStart = ts;
-    const pct = Math.min(100, ((ts - progRafStart) / PROG_DURATION) * 100);
-    progressFill.style.width = pct.toFixed(2) + '%';
-    if (pct < 100) requestAnimationFrame(tickProgress);
+    const pct = Math.min(90, ((ts - progRafStart) / PROG_DURATION) * 100);
+    if (!finished) progressFill.style.width = pct.toFixed(2) + '%';
+    if (pct < 90 && !finished) requestAnimationFrame(tickProgress);
   }
 
   function showSlide(idx) {
@@ -4207,8 +4228,27 @@ if (_rippleOK) {
     });
   }, 7000);
 
-  // Auto-finish at 11s
-  setTimeout(finishIntro, TOTAL);
+  // ── Preloader gating ──
+  // Reveal the site only once BOTH (a) the intro animation has played and
+  // (b) all page content has loaded. If content is still loading, the bar
+  // holds at 90% and the loading screen stays until it's ready.
+  let animDone = false, pageLoaded = false;
+  function completeAndFinish() {
+    if (finished) return;
+    progressFill.style.transition = 'width 0.45s ease';
+    progressFill.style.width = '100%';
+    setTimeout(finishIntro, 480);
+  }
+  function maybeFinish() { if (animDone && pageLoaded && !finished) completeAndFinish(); }
+
+  setTimeout(() => { animDone = true; maybeFinish(); }, TOTAL);
+
+  if (document.readyState === 'complete') { pageLoaded = true; maybeFinish(); }
+  else window.addEventListener('load', () => { pageLoaded = true; maybeFinish(); });
+
+  // Safety cap: never hold the loader more than 6s past the animation,
+  // even if a resource stalls.
+  setTimeout(() => { pageLoaded = true; maybeFinish(); }, TOTAL + 6000);
 
 })();
 
@@ -4646,6 +4686,41 @@ if (nav) {
       seek.addEventListener('input', () => {
         if (video.duration) video.currentTime = (seek.value / 1000) * video.duration;
       });
+
+      // Fullscreen toggle. Android/desktop fullscreen the wrapper (keeps the
+      // custom controls visible); iOS Safari falls back to native video fullscreen.
+      const fsBtn = document.getElementById('accFsBtn');
+      const inFs  = () => document.fullscreenElement || document.webkitFullscreenElement;
+      if (fsBtn) {
+        fsBtn.addEventListener('click', () => {
+          if (inFs()) {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+          } else if (videoWrap.requestFullscreen) {
+            videoWrap.requestFullscreen().catch(() => {});
+          } else if (videoWrap.webkitRequestFullscreen) {
+            videoWrap.webkitRequestFullscreen();
+          } else if (video.webkitEnterFullscreen) {
+            video.webkitEnterFullscreen();
+          }
+        });
+        const syncFs = () => controls.classList.toggle('is-fullscreen', !!inFs());
+        document.addEventListener('fullscreenchange', syncFs);
+        document.addEventListener('webkitfullscreenchange', syncFs);
+      }
+
+      // Auto-hide the controls while playing; reveal on hover/tap, keep shown when paused.
+      let hideTimer;
+      const scheduleHide = () => {
+        clearTimeout(hideTimer);
+        if (!video.paused) hideTimer = setTimeout(() => controls.classList.add('acc-hidden'), 2600);
+      };
+      const showControls = () => { controls.classList.remove('acc-hidden'); scheduleHide(); };
+      video.addEventListener('play',  scheduleHide);
+      video.addEventListener('pause', () => { clearTimeout(hideTimer); controls.classList.remove('acc-hidden'); });
+      video.addEventListener('ended', () => { clearTimeout(hideTimer); controls.classList.remove('acc-hidden'); });
+      ['pointermove', 'pointerdown', 'touchstart'].forEach(ev =>
+        videoWrap.addEventListener(ev, showControls, { passive: true }));
     }
   }
 
@@ -4685,7 +4760,7 @@ if (nav) {
     {
       name: 'Floating Suites & Residences',
       num: '01',
-      desc: 'Design and deliver floating hospitality assets and residences as permanent, high-performance real estate — not vessels. Optimized for comfort, environmental response, operational efficiency, and multi-jurisdiction deployment.',
+      desc: 'Design and deliver floating hospitality assets and residences as permanent, high performance real estate, not vessels. Optimized for comfort, environmental response, operational efficiency, and multi jurisdiction deployment.',
       blob: { top: '10%', left: '-12%' },
       icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><rect x="3" y="10" width="18" height="7" rx="1"/><path d="M6 10 L6 7 L18 7 L18 10"/><path d="M9 7 L9 4 L15 4 L15 7"/><path d="M1 20 Q6 16 12 20 Q18 24 23 20"/></svg>`
     },
@@ -4699,21 +4774,21 @@ if (nav) {
     {
       name: 'Urban Mobility',
       num: '03',
-      desc: 'Design water-based transportation infrastructure, including floating hubs, taxi terminals, and adaptive mobility platforms. Supports efficient coastal connectivity, reduces pressure on land transport networks, and enables future-ready urban water transit systems.',
+      desc: 'Design water based transportation infrastructure, including floating hubs, taxi terminals, and adaptive mobility platforms. Supports efficient coastal connectivity, reduces pressure on land transport networks, and enables future ready urban water transit systems.',
       blob: { top: '46%', left: '-8%' },
       icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M4 16 L6 8 L12 6 L18 8 L20 16"/><path d="M2 19 Q6 15 12 19 Q18 23 22 19"/><path d="M12 6 L12 3"/><path d="M9 3 L15 3"/></svg>`
     },
     {
       name: 'Recreational & Retail',
       num: '04',
-      desc: 'Design and master-plan adaptive marine developments that unlock new waterfront real estate value across residential, commercial, hospitality, and civic uses. Built around smart kinetic architecture, these water-based ecosystems respond to changing climate, temperature, and operational conditions, creating flexible assets with stronger long-term performance, regulatory resilience, and multiple revenue layers beyond single-use development.',
+      desc: 'Design and master plan adaptive marine developments that unlock new waterfront real estate value across residential, commercial, hospitality, and civic uses. Built around smart kinetic architecture, these water based ecosystems respond to changing climate, temperature, and operational conditions, creating flexible assets with stronger long term performance, regulatory resilience, and multiple revenue layers beyond single use development.',
       blob: { top: '64%', left: '-14%' },
       icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M9 20 L9 12 L15 12 L15 20"/><path d="M5 12 L12 5 L19 12"/><path d="M3 20 L21 20"/><path d="M6 12 L6 20"/><path d="M18 12 L18 20"/></svg>`
     },
     {
       name: 'Entertainment',
       num: '05',
-      desc: 'Create floating leisure and beach club environments designed for seasonal flexibility and year-round operational performance. Blends experience design with environmental sensitivity and regulatory compliance.',
+      desc: 'Create floating leisure and beach club environments designed for seasonal flexibility and year round operational performance. Blends experience design with environmental sensitivity and regulatory compliance.',
       blob: { top: '78%', left: '-6%' },
       icon: `<svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" stroke-width="1.2"><path d="M12 12 L12 21"/><path d="M5 12 Q12 4 19 12 Z"/><path d="M12 12 L12 8"/><circle cx="12" cy="6" r="1.4" fill="var(--accent)"/></svg>`
     },
