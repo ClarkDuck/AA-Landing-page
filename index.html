@@ -166,14 +166,6 @@ a, button, [role="button"], [tabindex] { outline-color: var(--accent); }
   filter: brightness(0) invert(1);
   opacity: 0.7;
 }
-.intro-ribbon-logo-jpg {
-  filter: grayscale(1) contrast(400%) invert(1);
-  mix-blend-mode: screen;
-}
-.intro-ribbon-logo-screen {
-  filter: none;
-  mix-blend-mode: screen;
-}
 
 
 /* Slide 3 — Stats */
@@ -379,9 +371,23 @@ nav {
     radial-gradient(ellipse 48% 50% at 75% 32%, rgba(6,48,46,0.3) 0%, transparent 60%),
     linear-gradient(to bottom, rgba(3,12,14,0.45) 0%, rgba(12,15,15,0.55) 80%, rgba(12,15,15,0.7) 100%);
 }
+/* Hero composition stage: fixed 1600px design, scaled as one unit to fill the
+   screen (--hero-scale set by JS). Keeps the whole layout proportional at every
+   desktop width instead of reflowing. Becomes display:contents on mobile. */
+.hero-stage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1600px;
+  height: 100%;
+  transform: translateX(-50%) scale(var(--hero-scale, 1));
+  transform-origin: center center;
+  pointer-events: none;
+  z-index: 4;
+}
 .hero-content {
   position: absolute;
-  left: max(80px, calc(50vw - 760px));   /* pull in from the edge on ultra-wide screens */
+  left: 80px;                /* fixed within the 1440 stage */
   top: 50%;
   transform: translateY(-50%);
   z-index: 10000;
@@ -422,20 +428,6 @@ nav {
   color: rgba(255,255,255,0.75);
   letter-spacing: 0.2px;
   text-shadow: 0 1px 12px rgba(0,0,0,0.7);
-}
-.hero-brand-name {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  color: #ffffff;
-  letter-spacing: 1px;
-  opacity: 0;
-  transform: translateX(60px);
-  transition: opacity 0.9s ease 0.35s, transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.35s;
-}
-.hero-content.visible .hero-brand-name {
-  opacity: 1;
-  transform: translateX(0);
 }
 .section-label {
   font-family: 'Oswald', sans-serif;
@@ -538,121 +530,6 @@ nav {
 }
 .hero-explore-btn:hover .hero-explore-btn-arrow { width: 40px; }
 
-/* ─── PRODUCTS INTRO STRIP ─── */
-.products-intro {
-  position: relative;
-  background: linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),url('assets/BackGrounds/products-bg.webp') center / cover no-repeat;
-  padding: 120px 50px 80px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 60px;
-}
-.products-intro::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 200px;
-  background: linear-gradient(to bottom, transparent 0%, rgb(12,15,15) 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-.products-intro-heading {
-  font-family: 'Montserrat', sans-serif;
-  font-size: clamp(48px, 5vw, 80px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -2px;
-  color: var(--white);
-  flex: 1;
-}
-.products-intro-heading em {
-  color: var(--accent);
-  font-style: normal;
-}
-.products-intro-desc {
-  max-width: 360px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: var(--white-dim);
-  letter-spacing: -0.3px;
-}
-.products-count {
-  font-family: 'Oswald', sans-serif;
-  font-size: 13px;
-  color: var(--accent);
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-
-
-/* ─── PRODUCTS STRIP (between hero and full sections) ─── */
-.featured-label-strip {
-  background: linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),url('assets/BackGrounds/products-bg.webp') center / cover no-repeat;
-  padding: 40px 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-.featured-label-strip::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, rgb(12,15,15) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-.featured-label-strip-right {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 12px;
-  color: var(--white-dim);
-  letter-spacing: 0.5px;
-}
-
-/* Slider header text */
-.slider-header-text {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  z-index: 4;
-  padding: 80px 80px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: none;
-}
-.slider-header-label {
-  font-family: 'Oswald', sans-serif;
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.slider-header-heading {
-  font-family: 'Montserrat', sans-serif;
-  font-size: clamp(32px, 3.5vw, 52px);
-  font-weight: 300;
-  letter-spacing: -2px;
-  line-height: 1;
-  color: var(--white);
-}
-.slider-header-heading em {
-  color: var(--accent);
-  font-style: normal;
-}
-.slider-header-desc {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.55;
-  max-width: 380px;
-  letter-spacing: -0.2px;
-}
 
 /* ─── PRODUCTS SCROLL SECTION ─── */
 .products-scroll-outer {
@@ -721,24 +598,9 @@ nav {
 }
 
 /* ─── PRODUCT SLIDER (single section) ─── */
-.product-slider-section {
-  position: relative;
-  height: 100vh;
-  min-height: 700px;
-  background: rgb(6,28,30);
-  overflow: hidden;
-}
 
 /* Background handled inline */
 
-/* Slide track */
-.slider-track {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-}
 /* Horizontal slides track — all slides inline, scroll drives position */
 .slides-track {
   display: flex;
@@ -790,7 +652,6 @@ nav {
   align-items: center;
   justify-content: center;
 }
-.slide-panel-model:hover .slide-model-hint { opacity: 1; }
 .slide-model-img {
   position: absolute;
   inset: 0;
@@ -835,21 +696,6 @@ nav {
 .slide-panel-model[data-model="iso"] .model-toggle-iso {
   color: rgba(255,255,255,0.82);
   border-color: rgba(255,255,255,0.3);
-}
-/* hover pulse hint */
-.slide-model-hint {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  z-index: 3;
 }
 .slide-panel-text {
   padding: 28px 52px;
@@ -1340,7 +1186,9 @@ nav {
   line-height: 1;
   letter-spacing: -1.8px;
   color: var(--white);
-  margin-bottom: 22px;
+  margin-bottom: 16px;
+  padding-left: 13px;            /* align header with the subtext below (nudged 1px left) */
+  padding-bottom: 6px;          /* room for descenders — line-height:1 + overflow:hidden was cropping them */
   overflow: hidden;
 }
 .wwd-active-name-inner {
@@ -1355,6 +1203,7 @@ nav {
   color: rgba(255,255,255,0.5);
   max-width: 380px;
   margin-bottom: 44px;
+  padding-left: 14px;            /* nudge the subtext right for a little breathing room */
   transition: opacity 0.4s ease;
 }
 
@@ -1557,7 +1406,6 @@ nav {
   letter-spacing: -3px;
   color: var(--white);
 }
-.statement-text.green { color: var(--accent); }
 .statement-text.right { text-align: right; display: block; }
 .statement-text-lead {
   font-size: clamp(28px, 3.4vw, 58px);
@@ -1571,7 +1419,7 @@ nav {
 .statement-acclimation-text {
   position: absolute;
   top: 60px;
-  left: 50px;              /* align with the What We Do section's text above */
+  left: 64px;              /* nudged right for breathing room (was 50px) */
   z-index: 5;
   max-width: 640px;
   transition: opacity 0.15s ease, transform 0.15s ease;
@@ -1716,14 +1564,6 @@ nav {
   border-top: 1px solid rgba(255,255,255,0.1);
   padding-top: 24px;
 }
-/* Right-side contact button */
-.serv-slide-right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 6vw 0 40px;
-  will-change: transform, opacity;
-}
 .serv-contact-btn {
   display: inline-flex;
   flex-direction: row;
@@ -1779,8 +1619,9 @@ nav {
 /* Step counter */
 .services-step-ctr {
   position: absolute;
-  top: 44px;
+  top: 50%;
   right: 60px;
+  transform: translateY(-50%);
   z-index: 10;
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
@@ -1966,116 +1807,14 @@ footer {
 
 /* ─── HERO → SECTION TRANSITION ─── */
 
-/* ─── OSHUN TRANSITION OVERLAY ─── */
-#oshunTransition {
-  display: none;
-  position: fixed;
-  z-index: 99990;
-  overflow: hidden;
-  pointer-events: none;
-  background: #191818;
-  will-change: left, top, width, height, border-radius, opacity;
-}
-#oshunTransition > img {
-  position: absolute;
-  left: 0; top: 0;
-  width: 58%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center center;
-  filter: url('#removeDarkBg') brightness(1.45) saturate(1.3) contrast(1.05);
-  transition: opacity 0.3s ease;
-}
-
-/* Mid-transition info panel */
-.txoc {
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 42%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 80px 8vw 80px 48px;
-  background: linear-gradient(90deg, rgba(25,24,24,0) 0%, rgba(25,24,24,0.65) 20%, rgba(25,24,24,0.9) 100%);
-  pointer-events: none;
-}
-.txoc-label,
-.txoc-name,
-.txoc-desc,
-.txoc-rule {
-  opacity: 0;
-  transform: translateX(55px);
-  transition: opacity 0.55s ease, transform 0.68s cubic-bezier(0.16,1,0.3,1);
-}
-.txoc.in .txoc-label { opacity: 1; transform: translateX(0); transition-delay: 0s; }
-.txoc.in .txoc-name  { opacity: 1; transform: translateX(0); transition-delay: 0.09s; }
-.txoc.in .txoc-desc  { opacity: 1; transform: translateX(0); transition-delay: 0.18s; }
-.txoc.in .txoc-rule  { opacity: 1; transform: translateX(0); transition-delay: 0.25s; }
-.txoc.out .txoc-label,
-.txoc.out .txoc-name,
-.txoc.out .txoc-desc,
-.txoc.out .txoc-rule {
-  opacity: 0 !important;
-  transform: translateX(55px) !important;
-  transition-duration: 0.28s !important;
-  transition-delay: 0s !important;
-}
-.txoc-label {
-  font-family: 'Oswald', sans-serif;
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 22px;
-  display: block;
-}
-.txoc-name {
-  font-family: 'Montserrat', sans-serif;
-  font-size: clamp(52px, 6.5vw, 104px);
-  font-weight: 300;
-  line-height: 0.88;
-  letter-spacing: -3px;
-  color: var(--white);
-  margin-bottom: 28px;
-}
-.txoc-desc {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.72;
-  color: rgba(255,255,255,0.5);
-  max-width: 360px;
-}
-.txoc-rule {
-  width: 36px;
-  height: 1px;
-  background: var(--accent);
-  margin-top: 32px;
-}
-
-/* Product slide content reveal during transition */
-.slider-slide.tx-entering .slide-main-img {
-  animation: txFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
-}
-.slider-slide.tx-entering .slide-callouts {
-  animation: txFadeUp 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) both;
-}
-.slider-slide.tx-entering .slide-panel-text {
-  animation: txFadeUp 0.65s 0.12s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes txFadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ─── HERO BLOB + VERTICAL CAROUSEL ─── */
 .hero-blob-wrap {
   position: absolute;
-  right: -240px;             /* bleed further off the right edge */
+  right: -280px;             /* big blob bleeds off the right so it covers the top-right corner */
   top: 50%;
   transform: translateY(-50%);
-  width: 1100px;
-  height: 150vh;
+  width: 1200px;             /* large frosted panel on the right half of the 1600 stage */
+  height: 1400px;            /* fixed (scales with the stage); tall enough to bleed off top & bottom */
   border-radius: 50%;
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(24px) saturate(160%);
@@ -2116,7 +1855,7 @@ footer {
 .hero-vert-viewport {
   position: absolute;
   top: 50%;
-  left: 62%;
+  left: 580px;               /* fixed position in the 1200 blob -> product centre ~1260 of the 1600 stage (no clip) */
   width: 400px;
   transform: translate(-50%, 0);
 }
@@ -2150,8 +1889,8 @@ footer {
 .hero-vert-meta {
   position: absolute;
   top: 50%;
-  left: 64px;
-  max-width: 340px;              /* capped so text can't reach/overlap the product */
+  left: 56px;
+  max-width: 232px;              /* capped so even the longest category clears the product */
   transform: translateY(-50%);
   text-align: left;
   pointer-events: none;
@@ -2165,7 +1904,7 @@ footer {
 }
 .hero-vert-combined {
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(16px, 1.4vw, 22px);
+  font-size: 17px;
   font-weight: 200;
   letter-spacing: 0px;
   color: rgba(255,255,255,0.95);
@@ -2273,6 +2012,8 @@ footer {
     gap: 34px;
     padding: 13vh 28px 132px;
   }
+  /* Mobile: no scaled stage — children behave as direct hero children */
+  .hero-stage { display: contents; }
   .hero-content {
     position: static;
     left: auto;
@@ -2283,6 +2024,7 @@ footer {
     align-items: center;
     text-align: center;
     gap: 20px;
+    order: 1;          /* logo + subtext on top … */
   }
   .hero-logo-main {
     width: min(66vw, 260px);
@@ -2292,7 +2034,9 @@ footer {
   .hero-tagline {
     max-width: 440px;
     margin-left: 0;
+    transform: none;   /* no horizontal slide on mobile: translateX(60px) overflowed the viewport ~32px */
   }
+  .hero-content.visible .hero-tagline { transform: none; }
   .hero-tagline p { font-size: 12.5px; line-height: 1.5; }
 
   /* Oversized frosted blob + scroll carousel: off-screen and GPU-heavy on phones */
@@ -2308,6 +2052,7 @@ footer {
     margin-top: auto;
     z-index: 9000;
     pointer-events: auto;
+    order: 2;          /* … product carousel below (swapped with logo/subtext) */
   }
   .hero-m-track {
     display: flex;
@@ -2721,8 +2466,8 @@ footer {
   .wwd-ghost-num { top: 16px; right: 20px; bottom: auto; font-size: clamp(64px, 20vw, 120px); }
   .wwd-item { grid-template-columns: 36px 1fr; gap: 12px; padding: 18px 0; }
   /* Longer category names/descriptions (from aa-ds.com) — scale to fit touch widths */
-  .wwd-active-name { font-size: clamp(26px, 7vw, 42px); letter-spacing: -1px; margin-bottom: 16px; }
-  .wwd-active-desc { font-size: 13.5px; line-height: 1.65; max-width: 100%; margin-bottom: 32px; }
+  .wwd-active-name { font-size: clamp(26px, 7vw, 42px); letter-spacing: -1px; margin-bottom: 10px; padding-left: 0; }
+  .wwd-active-desc { font-size: 13.5px; line-height: 1.65; max-width: 100%; margin-bottom: 32px; padding-left: 0; }
   .wwd-item-name { font-size: clamp(17px, 4.6vw, 22px); line-height: 1.25; }
 
   /* Services — spatial scroll scene disabled; static background + stacked layout */
@@ -2735,8 +2480,8 @@ footer {
   }
   .services-bg {
     transform: none !important;
-    background: linear-gradient(rgba(3,6,14,0.86) 0%, rgba(3,6,14,0.78) 50%, rgba(3,6,14,0.90) 100%),
-                url('assets/BackGrounds/Services-BG.webp') left center / cover no-repeat;
+    background: linear-gradient(rgba(3,6,14,0.70), rgba(3,6,14,0.70)),
+                url('assets/BackGrounds/Services-BG.webp') 15% center / cover no-repeat;
   }
   .services-intro {
     position: relative;
@@ -2761,7 +2506,6 @@ footer {
     border-top: 1px solid rgba(255,255,255,0.08);
   }
   .serv-slide-left { padding: 0; transform: none !important; }
-  .serv-slide-right { display: none; }
   .serv-slide-name { font-size: clamp(28px, 8vw, 52px); margin-bottom: 20px; }
   .serv-slide-desc { font-size: 13px; }
   /* Scroll-only chrome — hidden with the effect */
@@ -2787,9 +2531,6 @@ footer {
   .intro-stat-num { font-size: 60px; }
   #introSkip { bottom: 24px; right: 24px; }
 
-  /* Oshun transition panel */
-  .txoc { display: none; }
-  #oshunTransition > img { width: 100%; }
 }
 
 /* ─── TABLET refinements — scale the touch layout up (600–1024px) ─── */
@@ -2907,19 +2648,6 @@ footer {
 <!-- Water ripple overlay: outside pageWrap so filter:blur on pageWrap doesn't break position:fixed -->
 <div id="waterOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2147483647;pointer-events:none;background:rgba(255,255,255,0.04);filter:url('#water');"></div>
 
-<!-- Oshun transition overlay: outside pageWrap so it's in the DOM before the script runs -->
-<div id="oshunTransition">
-  <img src="assets/Product-Clay/oshun-clay-768.webp" width="768" height="768" alt="">
-  <div class="txoc" id="txoc">
-    <span class="txoc-label" id="txocLabel"></span>
-    <div class="txoc-name"  id="txocName"></div>
-    <p   class="txoc-desc"  id="txocDesc"></p>
-    <div class="txoc-rule"></div>
-  </div>
-</div>
-
-
-
 <!-- PAGE CONTENT WRAPPER (blurred during intro) -->
 <div id="pageWrap">
 
@@ -2960,14 +2688,8 @@ footer {
 <!-- HERO -->
 <div class="hero-outer" id="heroOuter">
 <section class="hero" id="hero">
-  <div class="hero-content" id="heroContent">
-    <img src="assets/Logos/logo-lg.webp" width="960" height="633" alt="Aquatic Architects" class="hero-logo-main">
-    <div class="hero-tagline">
-      <p>Since 2017, Aquatic Architects has been redefining life on water from the UAE to the world, across floating architecture, marine design, and master planning for coasts and islands.</p>
-    </div>
-  </div>
   <div class="hero-bg" style="filter:url('#water')">
-    <video autoplay loop muted playsinline preload="none" poster="assets/BackGrounds/hero-poster.webp">
+    <video loop muted playsinline preload="none" poster="assets/BackGrounds/hero-poster.webp">
       <source data-src="assets/BackGrounds/background-loop-opt.webm" type="video/webm">
     </video>
   </div>
@@ -2997,6 +2719,14 @@ footer {
     <div class="hero-m-dots" id="heroMDots"></div>
   </div>
 
+  <!-- Hero composition: logo + blob, scaled as one unit (see .hero-stage) -->
+  <div class="hero-stage" id="heroStage">
+  <div class="hero-content" id="heroContent">
+    <img src="assets/Logos/logo-lg.webp" width="960" height="633" alt="Aquatic Architects" class="hero-logo-main">
+    <div class="hero-tagline">
+      <p>Since 2017, Aquatic Architects has been redefining life on water from the UAE to the world, across floating architecture, marine design, and master planning for coasts and islands.</p>
+    </div>
+  </div>
   <!-- Frosted glass blob with vertical carousel -->
   <div class="hero-blob-wrap" id="heroBlobWrap">
     <div class="hero-vert-viewport">
@@ -3015,6 +2745,7 @@ footer {
       <button class="hero-vert-consult" id="heroVertConsult">Consult</button>
     </div>
   </div>
+  </div><!-- /hero-stage -->
   <!-- Notch arrow at blob's left edge -->
   <div class="hero-blob-notch">
     <svg viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3611,8 +3342,8 @@ footer {
   </div>
 
   <div class="statement-video-wrap">
-    <video class="statement-video-placeholder" id="accVideo" autoplay loop muted playsinline preload="metadata" poster="assets/Videos/acclimation-poster.webp">
-      <source src="assets/Videos/acclimation01.webm" type="video/webm">
+    <video class="statement-video-placeholder" id="accVideo" muted playsinline preload="metadata" poster="assets/Videos/acclimation-poster.webp">
+      <source src="assets/Videos/acclimation02.webm" type="video/webm">
     </video>
     <!-- Mobile-only custom controls (play/pause, seek, replay) -->
     <div class="acc-controls" id="accControls">
@@ -3791,17 +3522,13 @@ fadeEls.forEach(el => fadeObserver.observe(el));
   const slidesPhase = document.getElementById('productsSlidesPhase');
   if (!outer) return;
 
-  const overlay     = document.getElementById('oshunTransition');
   const heroOuter   = document.getElementById('heroOuter');
   const heroTrack   = document.getElementById('heroVertTrack');
   const slidesTrack = document.getElementById('slidesTrack');
   const dots        = document.querySelectorAll('.slider-dot');
   const counterEl   = document.getElementById('sliderCurrent');
-  const VERT_N      = 6;
   const VERT_STEP   = 380 + 24; // 404px
 
-  const ease = 'cubic-bezier(0.4,0,0.2,1)';
-  let wasDeep      = false;
   let reverseFired = false;
   let currentSlide = 0;
   const slideEls = document.querySelectorAll('.slider-slide');
@@ -3863,95 +3590,30 @@ fadeEls.forEach(el => fadeObserver.observe(el));
   window.goToSlide    = goToSlide;
   window.currentSlide = () => currentSlide;
 
-  function fadeOverlayOut() {
-    overlay.style.transition = 'opacity .5s ease';
-    overlay.style.opacity    = '0';
-    setTimeout(() => { overlay.style.display = 'none'; }, 550);
-  }
-
-  function contractToHeroCircle() {
-
-    // Hide products overlay while transition covers it
-    requestAnimationFrame(() => {
-      const productsOuter = document.getElementById('productsOuter');
-      if (productsOuter) productsOuter.style.display = 'none';
-      window.scrollTo({ top: (heroOuter.offsetHeight - window.innerHeight) * 0.03, behavior: 'instant' });
-
-      // Restore carousel to Orca (first item) centered — slide 0 is now Orca
-      if (heroTrack) {
-        const heroItems = Array.from(heroTrack.querySelectorAll('.hero-vert-item'));
-        heroItems.forEach((item, i) => {
-          const dist  = Math.abs(i - 0);
-          item.style.transform = `scale(${Math.max(0.45, 1.3 - dist * 0.55).toFixed(3)})`;
-          item.style.opacity   = Math.max(0.12, 1 - dist * 0.4).toFixed(3);
-        });
-        heroTrack.style.transform = `translateY(-${(0 * VERT_STEP + 190)}px)`;
-      }
-
-      // Measure Orca item (now in its correct scroll position) and contract to it
-      requestAnimationFrame(() => {
-        const heroItems   = heroTrack ? Array.from(heroTrack.querySelectorAll('.hero-vert-item')) : [];
-        const bridgeCircle = heroItems.length ? heroItems[0] : null;
-        if (!bridgeCircle) { fadeOverlayOut(); window._oshunTxFired = false; reverseFired = false; return; }
-
-        const cr  = bridgeCircle.getBoundingClientRect();
-        const img = overlay.querySelector('img');
-        if (img) img.style.objectFit = 'cover';
-
-        overlay.style.transition = `left .85s ${ease}, top .85s ${ease}, width .85s ${ease}, height .85s ${ease}, border-radius .85s ease`;
-        overlay.style.left         = cr.left   + 'px';
-        overlay.style.top          = cr.top    + 'px';
-        overlay.style.width        = cr.width  + 'px';
-        overlay.style.height       = cr.height + 'px';
-        overlay.style.borderRadius = '50%';
-
-        setTimeout(() => {
-          fadeOverlayOut();
-          setTimeout(() => {
-            reverseFired = false;
-            window._oshunTxFired = false;
-          }, 600);
-        }, 900);
-      });
-    });
-  }
-
   function fireReverseTransition() {
     reverseFired         = true;
-    wasDeep              = false;
     window._oshunTxFired = true; // block forward from re-firing during reverse animation
 
-    // Expand from the slide-0 (Orca) clay panel position to full screen
-    const bridgeSlide = document.querySelector('.slider-slide[data-index="0"]');
-    const imageWrap  = bridgeSlide && bridgeSlide.querySelector('.slide-panel-model');
-    const ir         = imageWrap ? imageWrap.getBoundingClientRect() : null;
-    const img        = overlay.querySelector('img');
-    if (img) { img.src = 'assets/Product-Clay/orca-clay.webp'; img.style.objectFit = 'contain'; }
+    // Simple fade: fade the products section out, revealing the hero behind it.
+    if (outer) { outer.style.transition = 'opacity 0.45s ease'; outer.style.opacity = '0'; }
 
-    if (ir) {
-      overlay.style.cssText = `
-        display:block; position:fixed; z-index:99990; overflow:hidden; pointer-events:none;
-        background:#191818; opacity:1; border-radius:12px;
-        left:${ir.left}px; top:${ir.top}px; width:${ir.width}px; height:${ir.height}px;
-        will-change:left,top,width,height,border-radius,opacity;
-      `;
-      overlay.getBoundingClientRect();
-      overlay.style.transition = `left .82s ${ease}, top .82s ${ease}, width .82s ${ease}, height .82s ${ease}, border-radius .82s ease`;
-      overlay.style.left         = '0';
-      overlay.style.top          = '0';
-      overlay.style.width        = '100vw';
-      overlay.style.height       = '100vh';
-      overlay.style.borderRadius = '0';
-      setTimeout(contractToHeroCircle, 860);
-    } else {
-      overlay.style.cssText = `
-        display:block; position:fixed; z-index:99990; overflow:hidden; pointer-events:none;
-        background:#191818; opacity:1; border-radius:0;
-        left:0; top:0; width:100vw; height:100vh;
-        will-change:left,top,width,height,border-radius,opacity;
-      `;
-      contractToHeroCircle();
+    // Restore the hero behind the fade (scroll to top, carousel back to Orca)
+    window.scrollTo({ top: (heroOuter.offsetHeight - window.innerHeight) * 0.03, behavior: 'instant' });
+    if (heroTrack) {
+      const heroItems = Array.from(heroTrack.querySelectorAll('.hero-vert-item'));
+      heroItems.forEach((item, i) => {
+        const dist = Math.abs(i - 0);
+        item.style.transform = `scale(${Math.max(0.45, 1.3 - dist * 0.55).toFixed(3)})`;
+        item.style.opacity   = Math.max(0.12, 1 - dist * 0.4).toFixed(3);
+      });
+      heroTrack.style.transform = `translateY(-${(0 * VERT_STEP + 190)}px)`;
     }
+
+    setTimeout(() => {
+      if (outer) { outer.style.display = 'none'; outer.style.opacity = ''; outer.style.transition = ''; }
+      reverseFired = false;
+      window._oshunTxFired = false;
+    }, 470);
   }
 
   // Expose for the prev arrow button
@@ -4342,28 +4004,18 @@ if (_rippleOK) {
     // Intro fade
     intro.style.opacity = (1 - sm(mr(p, 0, INTRO_END))).toFixed(3);
 
-    // Slides — left rises from below, right slides in from the right with a delay
+    // Slides — left rises from below
     let active = -1;
     slides.forEach((el, si) => {
       const { a, lt } = slideAlpha(p, si);
       el.style.opacity = a.toFixed(3);
       if (a > 0.5) active = si;
 
-      const leftEl  = el.querySelector('.serv-slide-left');
-      const rightEl = el.querySelector('.serv-slide-right');
+      const leftEl = el.querySelector('.serv-slide-left');
 
       // Left: translate up from below
       const leftTy = lerp(36, 0, sm(lt / 0.24));
       if (leftEl) leftEl.style.transform = `translateY(${leftTy.toFixed(1)}px)`;
-
-      // Right: translate in from the right, 0.06 segment delay
-      const rlt = Math.max(0, lt - 0.06);
-      const rightTx = lerp(60, 0, sm(rlt / 0.28));
-      const rightA  = sm(mr(lt, 0.04, 0.36));
-      if (rightEl) {
-        rightEl.style.transform = `translateX(${rightTx.toFixed(1)}px)`;
-        rightEl.style.opacity   = rightA.toFixed(3);
-      }
     });
 
     // Step counter
@@ -4381,22 +4033,36 @@ if (_rippleOK) {
   update();
 })();
 
-// ─── Hero background video: load only on desktop (>1024px).
-// Mobile shows the poster (.hero-bg background) — saves ~716KB and dodges iOS autoplay gaps.
+// ─── Hero composition: scale the fixed 1600px stage to fill the viewport width,
+// so the layout looks proportionally identical at every desktop size (no reflow).
+(function() {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+  const DESIGN_W = 1600;
+  function setScale() {
+    if (window.matchMedia('(max-width: 1024px)').matches) { hero.style.removeProperty('--hero-scale'); return; }
+    const s = Math.min(1.7, Math.max(0.66, window.innerWidth / DESIGN_W));
+    hero.style.setProperty('--hero-scale', s.toFixed(4));
+  }
+  setScale();
+  window.addEventListener('resize', setScale, { passive: true });
+})();
+
+// ─── Hero background video: the 716KB webm is light enough to run everywhere,
+// so load + play it on mobile and desktop alike (muted + playsinline = allowed).
 (function() {
   const v = document.querySelector('.hero-bg video');
   if (!v) return;
-  if (window.matchMedia('(max-width: 1024px)').matches) {
-    v.remove();
-  } else {
-    const s = v.querySelector('source[data-src]');
-    if (s && !s.src) {
-      s.src = s.getAttribute('data-src');
-      v.load();
-      const p = v.play();
-      if (p && p.catch) p.catch(() => {});
-    }
-  }
+  const s = v.querySelector('source[data-src]');
+  if (s && !s.src) { s.src = s.getAttribute('data-src'); v.load(); }
+  const play = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+  play();
+  // iOS Low Power Mode (and some bfcache restores) can block muted autoplay —
+  // retry on return-to-page and kick it off on the first user interaction.
+  window.addEventListener('pageshow', play);
+  const kick = () => { play(); window.removeEventListener('touchstart', kick); window.removeEventListener('pointerdown', kick); };
+  window.addEventListener('touchstart', kick, { passive: true });
+  window.addEventListener('pointerdown', kick, { passive: true });
 })();
 
 // ─── Hero vertical carousel — scroll-driven + Oshun hero→product transition
@@ -4418,7 +4084,6 @@ if (_rippleOK) {
   const nameEl      = document.getElementById('heroVertName');
   const subEl       = document.getElementById('heroVertSub');
   const idxEl       = document.getElementById('heroVertConsult');
-  const overlay     = document.getElementById('oshunTransition');
   const exploreBtn  = document.getElementById('heroExploreBtn');
 
   window._oshunTxFired = window._oshunTxFired || false;
@@ -4470,138 +4135,25 @@ if (_rippleOK) {
   // Slides are now physically ordered to match the hero, so this is a 1:1 map.
   const SLIDE_MAP = [0, 1, 2, 3, 4, 5];
 
-  // clay model image for each hero item
-  const CLAY_MAP = [
-    'assets/Product-Clay/orca-clay.webp',
-    'assets/Product-Clay/aquapod-clay.webp',
-    'assets/Product-Clay/cabana-clay.webp',
-    'assets/Product-Clay/Mantaray Clay.webp',
-    'assets/Product-Clay/farm-clay.webp',
-    'assets/Product-Clay/Oshun Clay 2.webp'
-  ];
-
-  function fadeOutOverlay() {
-    overlay.style.transition = 'opacity 0.5s ease';
-    overlay.style.opacity = '0';
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      const txoc = document.getElementById('txoc');
-      if (txoc) txoc.classList.remove('in', 'out');
-    }, 530);
-  }
-
-  function fireTransition(heroIdx, clickX, clickY) {
+  function fireTransition(heroIdx) {
+    if (window._oshunTxFired) return;
     window._oshunTxFired = true;
 
     const hIdx     = (heroIdx !== undefined) ? heroIdx : N - 1;
     const slideIdx = SLIDE_MAP[hIdx] !== undefined ? SLIDE_MAP[hIdx] : 0;
 
-    // Read product info from slide DOM (works even while hidden)
-    const targetSlide = document.querySelector(`.slider-slide[data-index="${slideIdx}"]`);
-    const txLabel = targetSlide ? (targetSlide.querySelector('.slide-label')?.textContent || '') : '';
-    const txName  = targetSlide ? (targetSlide.querySelector('.slide-name')?.textContent  || '') : '';
-    const txDesc  = targetSlide ? (targetSlide.querySelector('.slide-desc')?.textContent  || '') : '';
+    const po = document.getElementById('productsOuter');
+    const st = document.getElementById('slidesTrack');
+    if (st) { st.style.transition = 'none'; st.style.transform = `translateX(-${slideIdx * 100}vw)`; }
+    if (typeof window.goToSlide === 'function') window.goToSlide(slideIdx);
 
-    // Populate text panel and reset state
-    const txoc      = document.getElementById('txoc');
-    const txocLabel = document.getElementById('txocLabel');
-    const txocName  = document.getElementById('txocName');
-    const txocDesc  = document.getElementById('txocDesc');
-    if (txocLabel) txocLabel.textContent = txLabel;
-    if (txocName)  txocName.textContent  = txName;
-    if (txocDesc)  txocDesc.textContent  = txDesc;
-    if (txoc)      txoc.classList.remove('in', 'out');
-
-    const overlayImg = overlay.querySelector('img');
-    if (overlayImg) {
-      overlayImg.src = CLAY_MAP[hIdx] || CLAY_MAP[N - 1];
-      overlayImg.style.objectFit = 'contain';
+    // Simple crossfade: fade the products section in over the hero.
+    if (po) {
+      po.style.opacity = '0';
+      po.style.transition = 'opacity 0.45s ease';
+      po.style.display = 'block';
+      requestAnimationFrame(() => requestAnimationFrame(() => { po.style.opacity = '1'; }));
     }
-
-    let startL, startT, startW, startH;
-    if (clickX !== undefined && clickY !== undefined) {
-      const sz = 80;
-      startL = clickX - sz / 2;
-      startT = clickY - sz / 2;
-      startW = sz; startH = sz;
-    } else {
-      const r = (items[hIdx] || items[N - 1]).getBoundingClientRect();
-      startL = r.left; startT = r.top; startW = r.width; startH = r.height;
-    }
-
-    // ── Phase 1: overlay expands from hero circle to fullscreen (750ms) ──
-    overlay.style.cssText = `
-      display:block; position:fixed; z-index:99990; overflow:hidden; pointer-events:none;
-      background:#191818; opacity:1; border-radius:50%;
-      left:${startL}px; top:${startT}px; width:${startW}px; height:${startH}px;
-      will-change:left,top,width,height,border-radius,opacity;
-    `;
-    overlay.getBoundingClientRect();
-    overlay.style.transition = `left 0.75s cubic-bezier(0.76,0,0.24,1), top 0.75s cubic-bezier(0.76,0,0.24,1), width 0.75s cubic-bezier(0.76,0,0.24,1), height 0.75s cubic-bezier(0.76,0,0.24,1), border-radius 0.75s ease`;
-    overlay.style.left         = '0';
-    overlay.style.top          = '0';
-    overlay.style.width        = '100vw';
-    overlay.style.height       = '100vh';
-    overlay.style.borderRadius = '0';
-
-    // ── Phase 2: slide in product label, name, description from the right ──
-    setTimeout(() => {
-      if (txoc) txoc.classList.add('in');
-
-      // Show products overlay while transition covers it
-      setTimeout(() => {
-        const productsOuter = document.getElementById('productsOuter');
-        if (productsOuter) productsOuter.style.display = 'block';
-        const slidesTrack = document.getElementById('slidesTrack');
-        if (slidesTrack) {
-          slidesTrack.style.transition = 'none';
-          slidesTrack.style.transform  = `translateX(-${slideIdx * 100}vw)`;
-        }
-        if (typeof window.goToSlide === 'function') window.goToSlide(slideIdx);
-      }, 200);
-
-      // ── Phase 3: text fully visible + hold, then text exits right ──
-      // last element (desc) finishes at: 180ms delay + 550ms duration = 730ms
-      // add 520ms hold → total 1250ms after phase 2 start
-      const TEXT_VISIBLE = 730 + 520;
-      setTimeout(() => {
-
-        if (txoc) {
-          txoc.classList.remove('in');
-          txoc.classList.add('out');
-        }
-
-        // ── Phase 4: after text exits (300ms), shrink overlay to clay panel ──
-        setTimeout(() => {
-          if (txoc) txoc.classList.remove('out');
-
-          const freshSlide = document.querySelector(`.slider-slide[data-index="${slideIdx}"]`);
-          const clayPanel  = freshSlide && freshSlide.querySelector('.slide-panel-model');
-
-          // Infographic + text sides fade-up while overlay is still covering the clay panel
-          if (freshSlide) {
-            freshSlide.classList.add('tx-entering');
-            setTimeout(() => freshSlide.classList.remove('tx-entering'), 1400);
-          }
-
-          if (!clayPanel) { fadeOutOverlay(); return; }
-
-          const ir = clayPanel.getBoundingClientRect();
-          overlay.style.transition = `left 0.72s cubic-bezier(0.25,0.46,0.45,0.94), top 0.72s cubic-bezier(0.25,0.46,0.45,0.94), width 0.72s cubic-bezier(0.25,0.46,0.45,0.94), height 0.72s cubic-bezier(0.25,0.46,0.45,0.94), border-radius 0.72s ease`;
-          overlay.style.left         = ir.left   + 'px';
-          overlay.style.top          = ir.top    + 'px';
-          overlay.style.width        = ir.width  + 'px';
-          overlay.style.height       = ir.height + 'px';
-          overlay.style.borderRadius = '12px';
-
-          // ── Phase 5: overlay fades at panel position → seamless handoff to real clay ──
-          setTimeout(fadeOutOverlay, 760);
-
-        }, 300);
-
-      }, TEXT_VISIBLE);
-
-    }, 790); // after expand finishes
   }
 
   // Click any hero item to jump directly to its product slide
@@ -4664,6 +4216,8 @@ if (nav) {
   // expansion. Starts paused on the poster.
   const video = videoWrap.querySelector('video');
   if (video && window.matchMedia('(max-width: 1024px)').matches) {
+    // The <video> has no autoplay attribute, so it can't flash-play or fetch the
+    // 5MB webm on mobile — it stays on the poster until the user taps play.
     video.removeAttribute('autoplay');
     video.removeAttribute('loop');
     video.pause();
@@ -4722,6 +4276,12 @@ if (nav) {
       ['pointermove', 'pointerdown', 'touchstart'].forEach(ev =>
         videoWrap.addEventListener(ev, showControls, { passive: true }));
     }
+  } else if (video) {
+    // Desktop: background video plays + loops (the scroll handler expands it).
+    // Replaces the removed autoplay attribute so mobile can never flash-play it.
+    video.loop = true;
+    const pr = video.play();
+    if (pr && pr.catch) pr.catch(() => {});
   }
 
   window.addEventListener('scroll', () => {
